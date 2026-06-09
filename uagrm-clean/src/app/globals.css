@@ -1,0 +1,175 @@
+@import "tailwindcss";
+
+@theme {
+
+
+  --color-primary: #003399;
+  --color-primary-dark: #002068;
+  --color-secondary: #e31e24;
+  --color-accent-uagrm: #003399;
+
+  --color-surface: #f7f9fb;
+  --color-on-surface: #191c1e;
+  --color-on-surface-variant: #444653;
+
+  --color-radar-bg: #0a1229;
+  --color-radar-accent: #003399;
+  --color-radar-alert: #e31e24;
+  --color-radar-success: #7dd3fc;
+
+  --color-glass-bg: rgba(255, 255, 255, 0.6);
+  --color-glass-border: rgba(255, 255, 255, 0.4);
+
+
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+  --radius-4xl: 3rem;
+  --radius-5xl: 4rem;
+
+
+
+  --spacing-container-max: 1280px;
+
+
+  --font-display: "Montserrat", sans-serif;
+  --font-body: "Montserrat", sans-serif;
+
+
+
+  --background-image-gradient-premium:
+    linear-gradient(135deg, #003399 0%, #e31e24 100%);
+
+  --background-image-gradient-uagrm:
+    linear-gradient(135deg, #003399 0%, #002068 100%);
+
+  --background-image-gradient-soft:
+    linear-gradient(
+      135deg,
+      rgba(0, 51, 153, 0.05) 0%,
+      rgba(227, 30, 36, 0.05) 100%
+    );
+
+  --background-image-radar-grid:
+    radial-gradient(circle, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+ body { font-family: 'Montserrat', sans-serif; }
+        .glass {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .glass-dark {
+            background: rgba(0, 32, 104, 0.4);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .radar-glass-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .radar-glass-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(0, 51, 153, 0.3);
+        }
+        .premium-engineering-card {
+            background: #ffffff;
+            border: 1px solid rgba(0, 51, 153, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .premium-engineering-card:hover {
+            border-color: rgba(0, 51, 153, 0.3);
+            box-shadow: 0 20px 40px -15px rgba(0, 51, 153, 0.1);
+        }
+        .bg-mesh {
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 51, 153, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(227, 30, 36, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(0, 51, 153, 0.05) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(227, 30, 36, 0.1) 0px, transparent 50%);
+        }
+        .hero-blob {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 51, 153, 0.1) 0%, rgba(227, 30, 36, 0.05) 50%, transparent 100%);
+            z-index: -1;
+            filter: blur(80px);
+            animation: blob-move 20s infinite alternate ease-in-out;
+        }
+        @keyframes blob-move {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(100px, 50px) scale(1.1); }
+        }
+        .card-premium {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px -10px rgba(0, 51, 153, 0.05);
+        }
+        .card-premium:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -10px rgba(0, 51, 153, 0.12);
+        }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        .fill-icon { font-variation-settings: 'FILL' 1; }
+        
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.22, 1, 0.36, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        .particle-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float-particle 15s infinite linear;
+        }
+        @keyframes float-particle {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            50% { opacity: 0.4; }
+            100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+        }
+
+        .radar-scanner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(from 0deg, rgba(125, 211, 252, 0.1) 0%, transparent 60%);
+            transform-origin: center center;
+            animation: sweep 6s linear infinite;
+            border-radius: 50%;
+            translate: -50% -50%;
+        }
+        @keyframes sweep {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .glow-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .glow-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .glow-btn:hover::after { opacity: 1; }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 51, 153, 0.1); border-radius: 10px; }

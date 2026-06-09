@@ -1,0 +1,5 @@
+-- CreateEnum
+CREATE TYPE "UserType" AS ENUM ('STUDENT', 'TEACHER', 'ADMIN', 'VISITOR');
+
+-- CreateEnum
+CREATE TYPE "IncidentType" AS ENUM ('WASTE', 'BATHROOM', 'LIGHTING', 'FURNITURE', 'OTHER');

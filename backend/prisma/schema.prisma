@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+
+  role      Role     @default(USER)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+   assigned_reports Report[] @relation("Report_assignee")
+ invitations UserInvitation[] @relation("Invitation_creator")
+}
+
+enum Role {
+  ADMIN
+  MODERATOR
+  USER
+}
+
+
+model Report {
+  id String @id @default(uuid())
+
+  user_type String
+  register_number String
+
+  incident_type String
+
+  description String?
+
+  image_url String?
+
+  latitude Float
+  longitude Float
+
+  status ReportStatus @default(PENDING)
+
+  created_at DateTime @default(now())
+
+  assigned_to_id String?
+  assigned_to User? @relation("Report_assignee",fields: [assigned_to_id],references: [id])
+}
+
+enum ReportStatus {
+  PENDING
+  IN_PROGRESS
+  RESOLVED
+  REJECTED
+}
+
+
+model UserInvitation {
+  id        String @id @default(uuid())
+
+  email     String
+  role      Role
+
+  createdById String?
+  createdBy   User? @relation("Invitation_creator", fields: [createdById], references: [id])
+
+  status    InvitationStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([email])
+}
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+enum UserType {
+  STUDENT
+  TEACHER
+  ADMIN
+  VISITOR
+}
+
+enum IncidentType {
+  WASTE
+  BATHROOM
+  LIGHTING
+  FURNITURE
+  OTHER
+}

@@ -1,0 +1,329 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@layer base {
+  :root {
+    --radius: 0.85rem;
+
+
+    --background: #f6f8fb;
+    --foreground: #111827;
+
+    --card: #ffffff;
+    --card-foreground: #111827;
+
+    --popover: #ffffff;
+    --popover-foreground: #111827;
+
+    /* =========================
+   UAGRM CORE
+   EL AZUL MANDA
+========================= */
+
+    --primary: #003399;
+    --primary-foreground: #ffffff;
+
+    --secondary: #0f3d91;
+    --secondary-foreground: #ffffff;
+
+    /* Accent neutro */
+    --accent: #f3f6fb;
+    --accent-foreground: #003399;
+
+    /* =========================
+   UI
+========================= */
+
+    --muted: #eef3f9;
+    --muted-foreground: #64748b;
+
+    --border: #d9e2ef;
+    --input: #d9e2ef;
+
+    --ring: #2563eb;
+
+    --destructive: #dc2626;
+    --destructive-foreground: #ffffff;
+
+    /* =========================
+   CHARTS
+========================= */
+
+    --chart-1: #003399;
+    --chart-2: #2563eb;
+    --chart-3: #1d4ed8;
+    --chart-4: #60a5fa;
+    --chart-5: #94a3b8;
+
+    /* =========================
+   SIDEBAR
+========================= */
+
+    --sidebar: #002b80;
+    --sidebar-foreground: oklch(0.19 0.052 268.9);
+
+    --sidebar-primary: #003399;
+    --sidebar-primary-foreground: oklch(0.19 0.052 268.9);
+
+    --sidebar-accent: oklch(0.94 0.012 275);
+    --sidebar-accent-foreground: oklch(0.19 0.052 268.9);
+
+    --sidebar-border: rgba(255, 255, 255, 0.06);
+    --sidebar-ring: #2563eb;
+
+
+  }
+.dark {
+  /* =========================
+     BACKGROUND
+  ========================= */
+
+  --background: #0a1229;
+  --foreground: #f8fafc;
+
+  /* =========================
+     CARDS
+  ========================= */
+
+  --card: #111b38;
+  --card-foreground: #f8fafc;
+
+  --popover: #111b38;
+  --popover-foreground: #f8fafc;
+
+  /* =========================
+     BRAND COLORS
+  ========================= */
+
+  /* Botones principales */
+  --primary: #e31e24;
+  --primary-foreground: #ffffff;
+
+  /* Azul institucional */
+  --secondary: #003399;
+  --secondary-foreground: #ffffff;
+
+  /* Hover cards y menús */
+  --accent: #16244b;
+  --accent-foreground: #ffffff;
+
+  /* =========================
+     UI
+  ========================= */
+
+  --muted: #17233f;
+  --muted-foreground: #9fb0cf;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.08);
+
+  --ring: #e31e24;
+
+  --destructive: #ff4d4f;
+  --destructive-foreground: #ffffff;
+
+  /* =========================
+     CHARTS
+  ========================= */
+
+  --chart-1: #003399;
+  --chart-2: #2563eb;
+  --chart-3: #7dd3fc;
+  --chart-4: #e31e24;
+  --chart-5: #94a3b8;
+
+  /* =========================
+     SIDEBAR
+  ========================= */
+
+  /* Azul oscuro institucional */
+  --sidebar: #002068;
+
+  --sidebar-foreground: #ffffff;
+
+  /* Item activo */
+  --sidebar-primary: #e31e24;
+  --sidebar-primary-foreground: #ffffff;
+
+  /* Hover */
+  --sidebar-accent: rgba(255, 255, 255, 0.08);
+  --sidebar-accent-foreground: #ffffff;
+
+  --sidebar-border: rgba(255, 255, 255, 0.06);
+
+  --sidebar-ring: #e31e24;
+}
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+
+  --color-ring: var(--ring);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+
+  * {
+    @apply border-border outline-ring/40;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+/* ===================================
+PREMIUM UTILITIES
+=================================== */
+
+@layer utilities {
+  .uagrm-gradient {
+    background: linear-gradient(135deg,
+        #003399 0%,
+        #0f3d91 60%,
+        #1d4ed8 100%);
+  }
+
+  .uagrm-gradient-soft {
+    background: linear-gradient(135deg,
+        rgba(0, 51, 153, 0.05) 0%,
+        rgba(37, 99, 235, 0.04) 100%);
+  }
+
+  .card-premium {
+    background: rgba(255, 255, 255, 0.92);
+
+
+    border: 1px solid rgba(0, 51, 153, 0.08);
+
+    backdrop-filter: blur(10px);
+
+    box-shadow:
+      0 10px 30px rgba(0, 51, 153, 0.06);
+
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease,
+      border-color 0.25s ease;
+
+
+  }
+
+  .card-premium:hover {
+    transform: translateY(-3px);
+
+
+    border-color: rgba(0, 51, 153, 0.14);
+
+    box-shadow:
+      0 20px 45px rgba(0, 51, 153, 0.10);
+
+
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.72);
+
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    border: 1px solid rgba(255, 255, 255, 0.35);
+
+
+  }
+  
+
+.glass-dark {
+  background: rgba(17, 27, 46, 0.7);
+
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  border: 1px solid rgba(255,255,255,.05);
+}
+
+  .shadow-premium {
+    box-shadow:
+      0 8px 30px rgba(0, 51, 153, 0.08);
+  }
+
+  .shadow-uagrm {
+    box-shadow:
+      0 0 24px rgba(0, 51, 153, 0.12);
+  }
+
+  .border-premium {
+    border:
+      1px solid rgba(0, 51, 153, 0.08);
+  }
+
+  .dark .card-premium {
+  background: rgba(17, 27, 46, 0.9);
+
+  border: 1px solid rgba(59,130,246,.10);
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.25);
+}
+
+.dark .card-premium:hover {
+  border-color: rgba(59,130,246,.25);
+
+  box-shadow:
+    0 20px 40px rgba(0,0,0,.35);
+}
+}
