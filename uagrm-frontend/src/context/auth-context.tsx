@@ -4,7 +4,7 @@ import { createContext, useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 
-import createClient from "@/lib/supabase/client";
+import {supabase} from "@/lib/supabase/client";
 import { Loader } from "@/@core/components/loader/Loader";
 
 import {
@@ -31,7 +31,7 @@ export const AuthProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const supabase = createClient();
+
   const router = useRouter();
 
   const [user, setUser] = useState<User | null>(null);
@@ -41,10 +41,16 @@ export const AuthProvider = ({
   const [loading, setLoading] = useState(true);
 
   const loadProfile = async () => {
+    console.log("Loading profile...");
+      console.log("Loading profile...");
     try {
       const {
-        data: { session },
-      } = await supabase.auth.getSession();
+        data: { session },error
+      } = await supabase.auth.getSession(); 
+      console.log("Session data:", session, "Error:", error);
+        console.log("Session data:", session, "Error:", error);
+        console.log("Session data:", session, "Error:", error);
+
 
       const currentUser = session?.user ?? null;
 

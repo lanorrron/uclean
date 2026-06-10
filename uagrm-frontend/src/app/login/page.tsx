@@ -9,7 +9,7 @@ import { AuthContext } from "@/context/auth-context";
 import { LoginParams } from "@/context/types";
 import { Loader } from "@/@core/components/loader/Loader";
 import { FcGoogle } from "react-icons/fc";
-import createClient from "@/lib/supabase/client";
+import {supabase} from "@/lib/supabase/client";
 import { useSearchParams, useRouter } from "next/navigation";
 import { LoaderCircle, Mail, Lock, AlertCircle, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -37,7 +37,6 @@ const Login = () => {
   const [captchaToken, setCaptchaToken] = useState('')
   const cloudflareSiteKey = process.env.NEXT_PUBLIC_SITE_KEY_CLOUDFLARE
 
-  const supabase = createClient();
   const searchParams = useSearchParams();
 
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<LoginFormInputs>({

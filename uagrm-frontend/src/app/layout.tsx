@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+// @ts-ignore: CSS import handled by Next.js app router
 import "./globals.css";
 import { ThemeProvider } from "@/context/theme-provider";
 

@@ -4,6 +4,7 @@ import { createServerClient } from "@supabase/ssr";
 const LOGIN_PATH = "/login";
 
 export default async function updateSession(request: NextRequest) {
+    console.log("MIDDLEWARE", request.nextUrl.pathname);
   let supabaseResponse = NextResponse.next({ request });
 
   // Initialize Supabase server client with custom cookie handling

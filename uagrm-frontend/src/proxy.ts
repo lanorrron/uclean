@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 import createClient from "@/lib/supabase/server"; // ESTE
 
 export async function proxy(req: NextRequest) {
+    console.log("PROXY", req.nextUrl.pathname);
   const res = NextResponse.next();
 
   const supabase = await createClient();
@@ -12,7 +13,7 @@ export async function proxy(req: NextRequest) {
   } = await supabase.auth.getSession();
 
   const path = req.nextUrl.pathname;
-  const protectedPaths = ["/dashboard", "/settings", "/wallets", "/payments", "/organization/members", "/charge", "developers"];
+  const protectedPaths = ["/dashboard", "/settings", "/wallets", "/payments", "/organization/members", "developers", "reset-password"];
   const authPaths = ["/login", "/register", "/forgot-password"];
 
   const isProtected = protectedPaths.some((p) => path.startsWith(p));
@@ -39,8 +40,8 @@ export const config = {
     "/wallets/:path*",
     "/payments/:path*",
     "/organization/:path*",
-    "/charge/:path*",
     "/developers/:path*",
+    "/reset-password/:path",
 
     "/login",
     "/register",

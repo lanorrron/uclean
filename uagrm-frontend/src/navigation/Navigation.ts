@@ -19,37 +19,32 @@ export const Navigation = (): MenuNavigationTypes => {
         {
           title: "Vista rápida",
           path: "/dashboard",
-           roles: [Role.ADMIN, Role.MODERATOR, Role.USER],
+          roles: [Role.ADMIN, Role.MODERATOR, Role.USER],
         },
         {
           title: "Reportes",
           path: "/dashboard/report",
-    roles: [Role.ADMIN, Role.MODERATOR, Role.USER],
+          roles: [Role.ADMIN, Role.MODERATOR, Role.USER],
         }
       ]
     },
+ 
     {
-      title: "Cobrar",
-      path: "/charge",
-      icon: Coins,
-  roles: [Role.ADMIN, Role.MODERATOR, Role.USER],
-    },
-    {
-      title: "Pagos",
-      path: "/payments",
+      title: "Reportes",
+      path: "/reports",
       icon: CreditCard,
-  roles: [Role.ADMIN, Role.MODERATOR, Role.USER],
+      roles: [Role.ADMIN, Role.MODERATOR, Role.USER],
     },
 
     {
       title: "Organización",
       icon: Building2,
-  roles: [Role.ADMIN, Role.MODERATOR, Role.USER],
+      roles: [Role.ADMIN, Role.MODERATOR, Role.USER],
       subMenuItems: [
         {
           title: "Usuarios",
           path: "/organization/members",
-       roles: [Role.ADMIN, Role.MODERATOR, Role.USER],
+          roles: [Role.ADMIN, Role.MODERATOR, Role.USER],
         }
       ]
     },

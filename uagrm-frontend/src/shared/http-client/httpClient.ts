@@ -1,4 +1,4 @@
-import createClient from "@/lib/supabase/client";
+import {supabase} from "@/lib/supabase/client";
 import axios, {
   Axios,
   AxiosError,
@@ -9,7 +9,7 @@ import axios, {
 import { ErrorHttp } from "./error.http";
 
 
-const supabase = createClient();
+
 
 async function getAccessToken(): Promise<string | null> {
   const { data, error } = await supabase.auth.getSession();
