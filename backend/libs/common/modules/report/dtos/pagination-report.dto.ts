@@ -1,10 +1,17 @@
-import { ReportStatus } from "@prisma/client";
-import { Transform, Type } from "class-transformer";
-import { IsOptional, IsInt, Min, IsEnum } from "class-validator";
+import { Type } from "class-transformer";
+import {
+    IsDate,
+    IsEnum,
+    IsInt,
+    IsOptional,
+    Min,
+    ValidateNested,
+} from "class-validator";
 
+import { ReportQueryDto } from "./report-query.dto";
+import { ReportStatus } from "@prisma/client";
 
 export class PaginationReportDto {
-
 
     @IsOptional()
     @IsInt()
@@ -18,11 +25,17 @@ export class PaginationReportDto {
     @Min(1)
     pageSize: number = 10;
 
+    @IsOptional()
+    @IsEnum(ReportStatus)
+    status?: ReportStatus;
 
     @IsOptional()
-    @IsEnum(ReportStatus, {
-        message: `status must be one of: ${Object.values(ReportStatus).join(", ")}`,
-    })
-    @Transform(({ value }) => (typeof value === "string" ? value.trim() : value))
-    status?: ReportStatus;
+    @Type(() => Date)
+    @IsDate()
+    from?: Date;
+
+    @IsOptional()
+    @Type(() => Date)
+    @IsDate()
+    to?: Date;
 }

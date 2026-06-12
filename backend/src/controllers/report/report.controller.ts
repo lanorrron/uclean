@@ -32,19 +32,23 @@ export class ReportController {
         @Body() dto: CreateReportDto,
         @UploadedFile() file?: Express.Multer.File,
     ) {
-        return this.reportService.create(dto, file);
+        const result = this.reportService.create(dto, file);
+          return HttpResponse.Success(result);
     }
 
     @Get(":id")
     async findById(
         @Param("id") id: string,
     ) {
-        return this.reportService.findById(id);
+        const result = await this.reportService.findById(id);
+        console.log(result);
+        return HttpResponse.Success(result);
     }
 
     @Public()
     @Get('')
     async getReports(@Req() req: Request, @Query() query: PaginationReportDto) {
+        console.log(query)
         const result = await this.reportService.reports(query);
         return HttpResponse.Success(result);
     }

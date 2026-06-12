@@ -3,6 +3,8 @@ import { Injectable } from "@nestjs/common";
 import { Report, ReportStatus } from "@prisma/client";
 import { DatabaseService } from "libs/common/database/database.service";
 import { CreateReportDto } from "./dtos/create-report.dto";
+import { ReportQueryDto } from "./dtos/report-query.dto";
+import { PaginationReportDto } from "./dtos/pagination-report.dto";
 
 @Injectable()
 export class ReportRepository {
@@ -52,28 +54,60 @@ export class ReportRepository {
         });
     }
 
-    async reports(page: number, pageSize: number, search?: string, status?: string): Promise<{ items: Report[], totalItems: number }> {
+    async reports(query: PaginationReportDto): Promise<{ items: Report[]; totalItems: number }> {
+        const {page,pageSize, from, status, to}= query
+
         const skip = (page - 1) * pageSize;
 
-        const where: any = {}
+        const where: any = {
+            AND: [],
+        };
 
-        if (status && status.trim() !== "") {
+       if (status) {
             where.AND.push({
-                status: { equals: status }
-            })
+                status: query.status,
+            });
         }
+
+        if (from) {
+            where.AND.push({
+                created_at: {
+                    gte: new Date(from),
+                },
+            });
+        }
+
+        if (to) {
+            where.AND.push({
+                created_at: {
+                    lte: new Date(to),
+                },
+            });
+        }
+
+        if (where.AND.length === 0) {
+            delete where.AND;
+        }
+
         const [items, totalItems] = await Promise.all([
             this.db.report.findMany({
                 where,
                 skip,
                 take: pageSize,
-                orderBy: { created_at: 'desc' },
+                orderBy: {
+                    created_at: "desc",
+                },
             }),
+
             this.db.report.count({
-                where
-            })
-        ])
-        return { items, totalItems };
+                where,
+            }),
+        ]);
+
+        return {
+            items,
+            totalItems,
+        };
     }
 
 }
