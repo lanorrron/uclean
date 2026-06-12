@@ -32,7 +32,7 @@ export class UserInvitationRepository {
   cancel(id: string) {
     return this.db.userInvitation.update({
       where: { id },
-      data: { status: InvitationStatus.DECLINED },
+      data: { status: InvitationStatus.DECLINED, deleted_at: new Date() },
     });
   }
 
@@ -44,7 +44,11 @@ export class UserInvitationRepository {
       },
     });
   }
-  listInvitations(){
-    return this.db.userInvitation.findMany();
+  listInvitations() {
+    return this.db.userInvitation.findMany({
+      where: {
+        status: InvitationStatus.PENDING,
+      },
+    });
   }
 }

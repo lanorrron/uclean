@@ -4,34 +4,34 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-    url      = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
+  id    String  @id @default(uuid())
+  email String  @unique
+  name  String?
 
-  role      Role     @default(USER)
+  role Role @default(AGENT)
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now()) @updatedAt
+  deleted_at DateTime?
 
-   assigned_reports Report[] @relation("Report_assignee")
- invitations UserInvitation[] @relation("Invitation_creator")
+  assigned_reports Report[]         @relation("Report_assignee")
+  invitations      UserInvitation[] @relation("Invitation_creator")
 }
 
 enum Role {
   ADMIN
   MODERATOR
-  USER
+  AGENT
 }
-
 
 model Report {
   id String @id @default(uuid())
 
-  user_type String
+  user_type       String
   register_number String
 
   incident_type String
@@ -40,15 +40,17 @@ model Report {
 
   image_url String?
 
-  latitude Float
+  latitude  Float
   longitude Float
 
   status ReportStatus @default(PENDING)
 
-  created_at DateTime @default(now())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now()) @updatedAt
+  deleted_at DateTime?
 
   assigned_to_id String?
-  assigned_to User? @relation("Report_assignee",fields: [assigned_to_id],references: [id])
+  assigned_to    User?   @relation("Report_assignee", fields: [assigned_to_id], references: [id])
 }
 
 enum ReportStatus {
@@ -58,23 +60,24 @@ enum ReportStatus {
   REJECTED
 }
 
-
 model UserInvitation {
-  id        String @id @default(uuid())
+  id String @id @default(uuid())
 
-  email     String
-  role      Role
+  email String
+  role  Role
 
   createdById String?
-  createdBy   User? @relation("Invitation_creator", fields: [createdById], references: [id])
+  createdBy   User?   @relation("Invitation_creator", fields: [createdById], references: [id])
 
-  status    InvitationStatus @default(PENDING)
+  status InvitationStatus @default(PENDING)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
 
   @@unique([email])
 }
+
 enum InvitationStatus {
   PENDING
   ACCEPTED

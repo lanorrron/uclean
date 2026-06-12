@@ -1,55 +1,44 @@
-import { MenuNavigationTypes, Role } from "@/navigation/types";
+import { Role } from "@/modules/user/types/user.type";
+import { MenuNavigationTypes, } from "@/navigation/types";
 import {
   LayoutDashboard,
-  Coins,
   CreditCard,
-  Wallet,
   Building2,
-  KeyRound,
-  Code
+
+  NotebookPen,
+  User
 } from "lucide-react";
+
 
 export const Navigation = (): MenuNavigationTypes => {
   const routes: MenuNavigationTypes = [
     {
       title: "Dashboards",
       icon: LayoutDashboard,
-      roles: [Role.ADMIN, Role.MODERATOR, Role.USER],
+      roles: [Role.ADMIN, Role.MODERATOR, Role.AGENT],
       subMenuItems: [
         {
           title: "Vista rápida",
           path: "/dashboard",
-          roles: [Role.ADMIN, Role.MODERATOR, Role.USER],
+          roles: [Role.ADMIN, Role.MODERATOR, Role.AGENT],
         },
-        {
-          title: "Reportes",
-          path: "/dashboard/report",
-          roles: [Role.ADMIN, Role.MODERATOR, Role.USER],
-        }
       ]
     },
- 
+
     {
       title: "Reportes",
       path: "/reports",
-      icon: CreditCard,
-      roles: [Role.ADMIN, Role.MODERATOR, Role.USER],
+      icon: NotebookPen,
+      roles: [Role.ADMIN, Role.MODERATOR, Role.AGENT],
     },
-
-    {
-      title: "Organización",
-      icon: Building2,
-      roles: [Role.ADMIN, Role.MODERATOR, Role.USER],
-      subMenuItems: [
         {
-          title: "Usuarios",
-          path: "/organization/members",
-          roles: [Role.ADMIN, Role.MODERATOR, Role.USER],
-        }
-      ]
+      title: "Usuarios",
+      path: "/users",
+      icon: User,
+      roles: [Role.ADMIN, Role.MODERATOR, Role.AGENT],
     },
-  ];
 
+  ];
   return routes;
 };
 

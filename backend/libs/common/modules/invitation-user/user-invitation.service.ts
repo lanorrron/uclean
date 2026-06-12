@@ -78,4 +78,8 @@ export class UserInvitationService {
     async listinvitations(){
         return await this.repo.listInvitations();
     }
+
+    async cancelInvitation(id: string) {
+        return await this.repo.cancel(id);
+    }
 }

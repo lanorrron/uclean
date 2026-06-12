@@ -1,3 +1,5 @@
+import { User, UserType } from "@/modules/user/types/user.type";
+
 export enum ReportStatus {
     PENDING = "PENDING",
     IN_PROGRESS = "IN_PROGRESS",
@@ -26,13 +28,10 @@ export type Report = {
     updated_at: Date;
 
     assigned_to_id?: string | null;
+    assigned_to?: User
 };
 
-export enum UserType {
-    STUDENT = "STUDENT",
-    TEACHER = "TEACHER",
-    VISITOR = "VISITOR"
-}
+
 export enum IncidentType {
     WASTE = "WASTE",
     BATHROOM = "BATHROOM",

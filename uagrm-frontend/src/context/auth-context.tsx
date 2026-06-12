@@ -12,8 +12,8 @@ import {
   AuthValues,
   LoginParams,
 } from "./types";
+import userService from "@/modules/user/services/user.service";
 
-import invitationService from "@/modules/user/services/invitation.service";
 
 const defaultValueProvider: AuthValues = {
   user: null,
@@ -60,7 +60,7 @@ export const AuthProvider = ({
       setIsAuthenticated(true);
 
       try {
-        const profile = await invitationService.me();
+        const profile = await userService.me();
         setProfile(profile);
       } catch (e) {
 
@@ -129,7 +129,7 @@ export const AuthProvider = ({
     setIsAuthenticated(true);
 
     try {
-      const profile = await invitationService.me();
+      const profile = await userService.me();
       setProfile(profile);
     } catch (e) {
       console.log(e);

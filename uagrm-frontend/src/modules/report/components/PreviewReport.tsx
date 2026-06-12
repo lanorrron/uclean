@@ -1,15 +1,15 @@
 "use client";
 
-import { useReport } from "../hooks/report.hook";
+import { useReport } from "../hooks/useReport.hook";
 
 import ReportInfo from "./ReportInfo";
 import ReportMap from "./ReportMap";
 import ReportTimeline from "./ReportTimeline";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { Card, CardContent } from "@/components/ui/card";
 import { AlertTriangle } from "lucide-react";
-import AssignmentReport from "./AssingReport";
+import AssignmentReport from "./AssignmentReport";
+import { useAssignment } from "../hooks/useAssignment.hook";
 
 interface Props {
   id: string;
@@ -17,6 +17,7 @@ interface Props {
 
 export default function PreviewReport({ id }: Props) {
   const { report, loading } = useReport(id);
+  const { assign } = useAssignment();
 
   if (loading) {
     return (
@@ -45,16 +46,24 @@ export default function PreviewReport({ id }: Props) {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
-      <AssignmentReport/>
-      
+    <div className=" mx-auto p-4 md:p-6 space-y-6">
+      <AssignmentReport
+      assignedTo={report.assigned_to}
+        onAssign={async (worker) => {
+          await assign(
+            report.id,
+            worker.id
+          );
+        }}
+      />
+
 
       {/* Grid de 2 columnas: Info + Evidence */}
       <div className="grid lg:grid-cols-2 gap-6">
         <ReportInfo report={report} />
         <ReportMap latitude={report.latitude} longitude={report.longitude} />
       </div>
-<ReportTimeline
+      <ReportTimeline
         items={[
           {
             title: "Reportado",

@@ -5,6 +5,7 @@ import {
     Controller,
     Get,
     Post,
+    Put,
     Req,
 } from "@nestjs/common";
 import { CreateUserInvitationDto } from "libs/common/modules/invitation-user/dtos/create-invitation.dto";
@@ -33,10 +34,16 @@ export class UserInvitationController {
         );
         return HttpResponse.Success(result);
     }
-    
+
     @Get('')
-    async getInvitations(){
-        const result= await this.service.listinvitations();
-         return HttpResponse.Success(result);
+    async getInvitations() {
+        const result = await this.service.listinvitations();
+        return HttpResponse.Success(result);
+    }
+
+    @Put(':id/cancel')
+    async cancelInvitation(@Req() req: any) {
+        const result = await this.service.cancelInvitation(req.params.id);
+        return HttpResponse.Success(result);
     }
 }

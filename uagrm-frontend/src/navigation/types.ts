@@ -1,3 +1,4 @@
+import { Role } from "@/modules/user/types/user.type";
 import { IconType } from "react-icons";
 
 
@@ -21,9 +22,5 @@ interface MenuItem {
 }
 export type MenuNavigationTypes = MenuItem[];
 
-export enum Role {
-  ADMIN = "ADMIN",
-  MODERATOR = "MODERATOR",
-  USER = "USER",
-}
+
 

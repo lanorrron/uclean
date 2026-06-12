@@ -1,8 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { DatabaseService } from "libs/common/database/database.service";
 import { CreateUserSystem } from "./user.type";
-import { Role } from "@prisma/client";
-
+import { Prisma, Role } from "@prisma/client";
 
 @Injectable()
 export class UserRepository {
@@ -10,18 +9,32 @@ export class UserRepository {
 
     async findById(id: string) {
         return this.db.user.findUnique({
-            where: { id }
-        })
+            where: { id, deleted_at: null }
+        });
     }
 
-    async create (data:CreateUserSystem){
+async findMany(role?: Role) {
+    return this.db.user.findMany({
+        where: {
+            deleted_at: null,
+            ... (role ? { role } : {})
+        }
+    });
+}
+
+    async create(data: CreateUserSystem) {
         return this.db.user.create({
-            data:{
+            data: {
                 ...data,
-                role:data.role?? Role.USER
+                role: data.role ?? Role.AGENT
             }
-        })
+        });
     }
-
+    async remove(id: string) {
+        return this.db.user.update({
+            where: { id },
+            data: { deleted_at: new Date() }
+        });
+    }
 
 }

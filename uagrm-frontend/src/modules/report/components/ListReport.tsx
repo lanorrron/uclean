@@ -1,7 +1,7 @@
 "use client";
 
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import { useReports } from "../hooks/reports.hook";
+import { useReports } from "../hooks/useReports.hook";
 import { Chip } from "@/components/ui/chip";
 import { MapPin, Calendar, AlertCircle } from "lucide-react";
 import { useState } from "react";

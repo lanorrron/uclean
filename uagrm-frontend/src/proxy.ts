@@ -29,14 +29,20 @@ export async function proxy(request: NextRequest) {
 
   // 🔥 IMPORTANTE: Usa getUser() para forzar validación del token
   const { data: { user }, error } = await supabase.auth.getUser();
-  
-  console.log("🔍 PROXY - User:", user?.email || "No user");
-  console.log("🔍 PROXY - Error:", error?.message);
 
   const path = request.nextUrl.pathname;
   
   // Rutas protegidas
-  const protectedPaths = ["/dashboard", "/settings", "/wallets", "/payments", "/organization", "/developers", "/reset-password"];
+const protectedPaths = [
+  "/dashboard",
+  "/settings",
+  "/wallets",
+  "/payments",
+  "/organization",
+  "/developers",
+  "/reset-password",
+  "/accept-invite", // 👈 IMPORTANTE
+];
   const authPaths = ["/login", "/register", "/forgot-password"];
 
   const isProtected = protectedPaths.some((p) => path.startsWith(p));
@@ -62,14 +68,9 @@ export async function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     "/dashboard/:path*",
-    "/settings/:path*",
-    "/wallets/:path*",
-    "/payments/:path*",
-    "/organization/:path*",
-    "/developers/:path*",
-    "/reset-password/:path*",
     "/login",
     "/register",
     "/forgot-password",
+    "/accept-invite", 
   ],
 };

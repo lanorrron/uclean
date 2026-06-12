@@ -31,6 +31,7 @@ export class ReportRepository {
     async findById(id: string) {
         return this.db.report.findUnique({
             where: { id },
+            include: { assigned_to: true },
         });
     }
 

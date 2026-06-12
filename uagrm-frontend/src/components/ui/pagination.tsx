@@ -1,57 +1,127 @@
+import * as React from "react"
 import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select";
-import IconButton from "@/components/ui/IconButton";
-import { GrFormNext } from "react-icons/gr";
-import { GrFormPrevious } from "react-icons/gr";
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  MoreHorizontalIcon,
+} from "lucide-react"
 
+import { cn } from "@/lib/utils"
+import { buttonVariants, type Button } from "@/components/ui/button"
 
-interface IPaginationSimple {
-    pageSize: number
-    currentPage: number
-    totalItems: number
-    totalPages: number
-    onChangePage: (value: number) => void
-    onChangeRowsPerPage: (value: number) => void
+function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
+  return (
+    <nav
+      role="navigation"
+      aria-label="pagination"
+      data-slot="pagination"
+      className={cn("mx-auto flex w-full justify-center", className)}
+      {...props}
+    />
+  )
 }
-export const Pagination = (params: IPaginationSimple) => {
-    const startIndex = ((params.currentPage - 1) * params.pageSize + 1)
-    const endIndex = Math.min(startIndex + params.pageSize - 1, params.totalItems);
-    return (
-        <div className={'flex items-center'}>
-            <Select onValueChange={(value) => params.onChangeRowsPerPage(Number(value))}>
-                <div className={'flex flex-row items-center'}>
-                    <h2 className={'text-muted-foreground'}>Rows per page:</h2>
-                    <div>
-                        <SelectTrigger className={'text-muted-foreground border-none focus:bg-accent p-1 gap-1'}>
-                            <SelectValue placeholder={`${params.pageSize ?? 10}`} className={'text-muted-foreground'} />
-                        </SelectTrigger>
-                    </div>
-                </div>
-                <SelectContent className={'border-none min-w-[3rem]'}>
-                    <SelectGroup>
-                        <SelectItem value="10" className={'ml-0 pl-0 justify-center'}>10</SelectItem>
-                        <SelectItem value="25" className={'ml-0 pl-0 justify-center'}>25</SelectItem>
-                        <SelectItem value="50" className={'ml-0 pl-0 justify-center'}>50</SelectItem>
-                    </SelectGroup>
-                </SelectContent>
-                <div className={'mx-2'}>
-                    <h2 className={'text-muted-foreground'}>{startIndex + '-' + endIndex + ' of ' + params.totalItems}</h2>
-                </div>
-            </Select>
-            <div>
-                <IconButton onClick={() => params.onChangePage(params.currentPage - 1)} disabled={params.currentPage === 1}>
-                    <GrFormPrevious className={'text-muted-foreground'} />
-                </IconButton>
-                <IconButton onClick={() => params.onChangePage(params.currentPage + 1)} disabled={params.currentPage === params.totalPages}>
-                    <GrFormNext className={'text-muted-foreground'} />
-                </IconButton>
-            </div>
-        </div>
-    )
+
+function PaginationContent({
+  className,
+  ...props
+}: React.ComponentProps<"ul">) {
+  return (
+    <ul
+      data-slot="pagination-content"
+      className={cn("flex flex-row items-center gap-1", className)}
+      {...props}
+    />
+  )
+}
+
+function PaginationItem({ ...props }: React.ComponentProps<"li">) {
+  return <li data-slot="pagination-item" {...props} />
+}
+
+type PaginationLinkProps = {
+  isActive?: boolean
+} & Pick<React.ComponentProps<typeof Button>, "size"> &
+  React.ComponentProps<"a">
+
+function PaginationLink({
+  className,
+  isActive,
+  size = "icon",
+  ...props
+}: PaginationLinkProps) {
+  return (
+    <a
+      aria-current={isActive ? "page" : undefined}
+      data-slot="pagination-link"
+      data-active={isActive}
+      className={cn(
+        buttonVariants({
+          variant: isActive ? "outline" : "ghost",
+          size,
+        }),
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function PaginationPrevious({
+  className,
+  ...props
+}: React.ComponentProps<typeof PaginationLink>) {
+  return (
+    <PaginationLink
+      aria-label="Go to previous page"
+      size="default"
+      className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
+      {...props}
+    >
+      <ChevronLeftIcon />
+      <span className="hidden sm:block">Previous</span>
+    </PaginationLink>
+  )
+}
+
+function PaginationNext({
+  className,
+  ...props
+}: React.ComponentProps<typeof PaginationLink>) {
+  return (
+    <PaginationLink
+      aria-label="Go to next page"
+      size="default"
+      className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
+      {...props}
+    >
+      <span className="hidden sm:block">Next</span>
+      <ChevronRightIcon />
+    </PaginationLink>
+  )
+}
+
+function PaginationEllipsis({
+  className,
+  ...props
+}: React.ComponentProps<"span">) {
+  return (
+    <span
+      aria-hidden
+      data-slot="pagination-ellipsis"
+      className={cn("flex size-9 items-center justify-center", className)}
+      {...props}
+    >
+      <MoreHorizontalIcon className="size-4" />
+      <span className="sr-only">More pages</span>
+    </span>
+  )
+}
+
+export {
+  Pagination,
+  PaginationContent,
+  PaginationLink,
+  PaginationItem,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
 }

@@ -1,4 +1,5 @@
-import { DatePreset, IncidentType, UserType } from "../type/report.type";
+import { UserType } from "@/modules/user/types/user.type";
+import { DatePreset, IncidentType } from "../type/report.type";
 
     export function getUserType(value: UserType) {
         switch (value) {

@@ -3,5 +3,5 @@ export enum ErrorType {
   Auth = 'AUTH',
   Environment = 'ENVIRONMENT',
   Role = 'ROLE',
- 
+  Report = 'REPORT',
 }

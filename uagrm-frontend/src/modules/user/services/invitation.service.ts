@@ -1,23 +1,17 @@
 import { ClientHttp } from "@/shared/http-client/httpClient";
 import { HttpResponse } from "@/shared/http-client/kravax-response.interface";
+import { Role } from "../types/user.type";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
-async function me() {
-    const result = await ClientHttp.get<HttpResponse>(
-        `${API_URL}/user/me`
-    );
-
-    return result.body.data;
-}
 async function accepInvitation() {
     const result = await ClientHttp.put<HttpResponse>(`${API_URL}/invitations/accept`)
     return result.body.data
 }
-async function sendInvitation(email: string, roleId: string) {
+async function sendInvitation(email: string, role: Role) {
     const result = await ClientHttp.post<HttpResponse>(`${API_URL}/invitations/invite`, {
         email: email,
-        role_id: roleId
+        role: role
     })
     return result.body.data
 }
@@ -42,16 +36,20 @@ async function updateInvitationRole(invitationId: string, roleId: string) {
         roleId
     },)
     return result.body.data
+}
 
+async function getAll() {
+    const result = await ClientHttp.get<HttpResponse>(`${API_URL}/invitations`)
+    return result.body.data
 }
 
 
 export default {
-    me,
     accepInvitation,
     sendInvitation,
     updateMemberrole,
     removeMember,
     cancelInvitation,
     updateInvitationRole
+    , getAll
 }

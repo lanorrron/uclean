@@ -61,8 +61,25 @@ async function getReportById(
 
   return result.body.data;
 }
+async function assignReport(
+  id: string,
+  userId: string
+) {
+
+  const result =
+    await ClientHttp.put<
+      HttpResponse<Report>
+    >(
+      `${BASE_URL}/reports/${id}`,
+      { userId }
+    );
+
+  return result.body.data;
+}
+
 
 export default {
   getReports,
   getReportById,
+  assignReport,
 };

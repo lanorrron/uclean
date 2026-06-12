@@ -4,6 +4,7 @@ import {
     Get,
     Param,
     Post,
+    Put,
     Query,
     Req,
     UploadedFile,
@@ -52,4 +53,13 @@ export class ReportController {
         const result = await this.reportService.reports(query);
         return HttpResponse.Success(result);
     }
+
+    @Put(":id")
+    async assign(
+        @Param("id") id: string,
+        @Body("userId") userId: string,
+    ) {
+        const result = await this.reportService.assign(id, userId);
+        return HttpResponse.Success(result);
+}
 }

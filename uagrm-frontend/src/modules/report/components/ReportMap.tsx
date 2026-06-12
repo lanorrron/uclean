@@ -25,7 +25,7 @@ export default function ReportMap({ latitude, longitude }: Props) {
 
   return (
     <Card className="border-border/50 shadow-sm overflow-hidden">
-      <CardContent className="">
+<CardContent className="flex flex-col h-full p-0">
         <div className="mx-2 pb-2 flex items-center justify-between ">
           <h3 className="font-semibold text-base flex items-center gap-2">
             <MapPin className="w-4 h-4 text-primary" />
@@ -53,10 +53,10 @@ export default function ReportMap({ latitude, longitude }: Props) {
           </div>
         </div>
 
-        <div
-          ref={mapRef}
-          className="h-[300px] w-full bg-muted/20 rounded-b-xl overflow-hidden"
-        >
+   <div
+  ref={mapRef}
+  className="w-full flex-1 min-h-[300px] bg-muted/20 rounded-b-xl overflow-hidden"
+>
           {!loaded && (
             <div className="h-full flex items-center justify-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
