@@ -60,7 +60,7 @@ export const SidebarHeader = ({ isOpenDrawer, onClose }: Props) => {
     dark:to-primary
   "
 >
-   CLEAN
+  EcoUAGRM
 </h1>
 </div>
 

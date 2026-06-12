@@ -41,6 +41,25 @@ export const SidebarContent = ({ onClose, isOpenDrawer, routes }: Props) => {
     };
 
     const ellipsisTextClass = 'whitespace-nowrap text-ellipsis overflow-hidden max-w-[200px]'
+    const isExactActive = (
+        path?: string
+    ) => {
+
+        if (!path) return false;
+
+        return pathName === path;
+    };
+
+    const isSubRouteActive = (
+        path?: string
+    ) => {
+
+        if (!path) return false;
+
+        return (
+            pathName.startsWith(`${path}/`)
+        );
+    };
 
     return (
         <div className="flex-grow p-2 transparent-scrollbar">
@@ -53,20 +72,24 @@ export const SidebarContent = ({ onClose, isOpenDrawer, routes }: Props) => {
                                 <Link
                                     href={item.path}
                                     onClick={onClose}
-                                    className={`group flex p-2 my-2 pl-3.5 rounded-lg transition-colors   ${pathName === item.path
-                                            ? 'bg-sidebar-primary text-primary-foreground'
+                                    className={`group flex p-2 my-2 pl-3.5 rounded-lg transition-colors   ${isExactActive(item.path)
+                                        ? 'bg-sidebar-primary text-primary-foreground'
+
+                                        : isSubRouteActive(item.path)
+                                            ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+
                                             : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                                         } relative`}
                                 >
                                     <div className="flex items-center w-full ">
                                         {item.icon && (
                                             <div>
-                                                <item.icon size={'21px'}/>
+                                                <item.icon size={'21px'} />
                                             </div>
                                         )}
                                         <div className={`ml-2 flex-1 ${(settings.navCollapsed && !isOpenDrawer)
-                                                ? 'hidden group-hover:block transition-all duration-500'
-                                                : 'block'
+                                            ? 'hidden group-hover:block transition-all duration-500'
+                                            : 'block'
                                             } ${ellipsisTextClass}`}>
                                             <span className={` ${pathName === item.path ? 'text-primary-foreground font-mui font-medium' : 'text-muted-foreground font-mui font-medium'
                                                 }`}>
@@ -92,29 +115,39 @@ export const SidebarContent = ({ onClose, isOpenDrawer, routes }: Props) => {
                                 /* Items sin path (solo títulos) */
                                 <div
                                     className={`group flex p-2 my-2 pl-3.5 rounded-lg transition-colors cursor-pointer ${openSubMenus.includes(index)
-                                            ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-                                            : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
+                                        ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                                        : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                                         } relative`}
                                     onClick={() => toggleSubMenu(index)}
                                 >
                                     <div className="flex items-center w-full">
                                         {item.icon && (
                                             <div className="">
-                                                <item.icon size={'21px'}/>
+                                                <item.icon size={'21px'} />
                                             </div>
                                         )}
                                         <div className={`ml-2 flex-1 ${(settings.navCollapsed && !isOpenDrawer)
-                                                ? 'hidden group-hover:block transition-all duration-500'
-                                                : 'block'
+                                            ? 'hidden group-hover:block transition-all duration-500'
+                                            : 'block'
                                             } ${ellipsisTextClass}`}>
                                             <span className="text-muted-foreground font-mui font-medium">
                                                 {item.title}
                                             </span>
                                         </div>
                                         {item.subMenuItems && (
-                                            <div className="absolute right-2">
+                                            <div
+                                                className={`
+            absolute right-2 text-muted-foreground
+            ${settings.navCollapsed && !isOpenDrawer
+                                                        ? "hidden group-hover:block"
+                                                        : "block"
+                                                    }
+        `}
+                                            >
                                                 <MdOutlineKeyboardArrowRight
-                                                    className={`text-lg transition-transform ${openSubMenus.includes(index) ? 'rotate-90' : ''
+                                                    className={`text-lg transition-transform ${openSubMenus.includes(index)
+                                                        ? "rotate-90"
+                                                        : ""
                                                         }`}
                                                 />
                                             </div>
@@ -126,8 +159,8 @@ export const SidebarContent = ({ onClose, isOpenDrawer, routes }: Props) => {
                             {/* Submenús */}
                             {item.subMenuItems && openSubMenus.includes(index) && (
                                 <ul className={`ml-4 mt-1 ${(settings.navCollapsed && !isOpenDrawer)
-                                        ? 'hidden group-hover:block'
-                                        : 'block'
+                                    ? 'hidden group-hover:block'
+                                    : 'block'
                                     }`}>
                                     {item.subMenuItems.map((subItem, subIndex) => (
                                         <Link
@@ -136,8 +169,8 @@ export const SidebarContent = ({ onClose, isOpenDrawer, routes }: Props) => {
                                             onClick={onClose}
                                         >
                                             <li className={`text-sm flex items-center gap-x-2 cursor-pointer p-2 my-1 pl-3 rounded-md transition-colors ${pathName === subItem.path
-                                                    ? 'bg-primary text-primary-foreground'
-                                                    : 'text-muted-foreground hover:bg-sidebar-accent '
+                                                ? 'bg-primary text-primary-foreground'
+                                                : 'text-muted-foreground hover:bg-sidebar-accent '
                                                 }`}>
                                                 <TbPointFilled className="text-sm flex-shrink-0" />
                                                 <span className={`${ellipsisTextClass} font-mui font-medium`}>

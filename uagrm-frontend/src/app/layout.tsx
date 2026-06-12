@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
+
 // @ts-ignore: CSS import handled by Next.js app router
 import "./globals.css";
-import { ThemeProvider } from "@/context/theme-provider";
+
+import { Toaster } from "react-hot-toast";
 
 import { cn } from "@/lib/utils";
+
+import { ThemeProvider } from "@/context/theme-provider";
 import { AuthProvider } from "@/context/auth-context";
 import { SettingsProvider } from "@/context/settings-provider";
-import { Toaster } from "react-hot-toast";
 
 const fontMui = {
   variable: "--font-mui",
@@ -14,22 +17,33 @@ const fontMui = {
 
 export const metadata: Metadata = {
   title: {
-    default: "Kravax - Pasarela de Pagos Crypto",
-    template: "%s | Kravax"
+    default: "EcoUAGRM - Reportes Ambientales",
+    template: "%s | EcoUAGRM",
   },
-  description: "Pasarela crypto para pagos seguros y rápidos. Acepta USDT, USDC y otras criptomonedas en tu negocio.",
-  keywords: [
-    "pasarela crypto",
-    "pagos con criptomonedas",
-    "bitcoin payments",
-    "ethereum",
-    "blockchain payments",
-    "crypto gateway",
-    "Kravax"
-  ],
-  authors: [{ name: "Kravax" }],
-  creator: "Kravax",
 
+  description:
+    "Sistema de reportes ambientales y mantenimiento para la UAGRM. Gestiona incidentes, residuos, iluminación, baños y más.",
+
+  keywords: [
+    "EcoUAGRM",
+    "UAGRM",
+    "reportes ambientales",
+    "incidentes universitarios",
+    "residuos sólidos",
+    "mantenimiento",
+    "campus universitario",
+    "reportes ecológicos",
+    "universidad",
+    "sistema de reportes",
+  ],
+
+  authors: [
+    {
+      name: "EcoUAGRM",
+    },
+  ],
+
+  creator: "EcoUAGRM",
 };
 
 export default function RootLayout({
@@ -37,9 +51,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="es"
+      suppressHydrationWarning
+    >
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
@@ -52,12 +68,19 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {" "}
           <SettingsProvider>
-            <AuthProvider>{children}</AuthProvider>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
           </SettingsProvider>
         </ThemeProvider>
-        <Toaster />
+
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 3500,
+          }}
+        />
       </body>
     </html>
   );

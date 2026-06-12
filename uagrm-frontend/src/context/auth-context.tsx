@@ -4,7 +4,7 @@ import { createContext, useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 
-import {supabase} from "@/lib/supabase/client";
+import { supabase } from "@/lib/supabase/client";
 import { Loader } from "@/@core/components/loader/Loader";
 
 import {
@@ -19,7 +19,7 @@ const defaultValueProvider: AuthValues = {
   user: null,
   profile: null,
   login: async () => ({ success: false }),
-  logout: async () => {},
+  logout: async () => { },
   isAuthenticated: false,
 };
 
@@ -31,7 +31,6 @@ export const AuthProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-
   const router = useRouter();
 
   const [user, setUser] = useState<User | null>(null);
@@ -40,19 +39,15 @@ export const AuthProvider = ({
     useState(false);
   const [loading, setLoading] = useState(true);
 
+
   const loadProfile = async () => {
-    console.log("Loading profile...");
-      console.log("Loading profile...");
     try {
       const {
-        data: { session },error
-      } = await supabase.auth.getSession(); 
-      console.log("Session data:", session, "Error:", error);
-        console.log("Session data:", session, "Error:", error);
-        console.log("Session data:", session, "Error:", error);
-
+        data: { session },
+      } = await supabase.auth.getSession();
 
       const currentUser = session?.user ?? null;
+
 
       if (!currentUser) {
         setUser(null);
@@ -61,13 +56,18 @@ export const AuthProvider = ({
         return;
       }
 
-      const profile = await invitationService.me();
-
       setUser(currentUser);
-      setProfile(profile);
       setIsAuthenticated(true);
-    } catch (error) {
-      console.log(error);
+
+      try {
+        const profile = await invitationService.me();
+        setProfile(profile);
+      } catch (e) {
+
+      }
+
+    } catch (e) {
+
 
       setUser(null);
       setProfile(null);
@@ -82,7 +82,8 @@ export const AuthProvider = ({
 
     const { data: listener } =
       supabase.auth.onAuthStateChange(
-        async (_, session) => {
+        async (event, session) => {
+
           const currentUser = session?.user ?? null;
 
           if (!currentUser) {
@@ -92,16 +93,8 @@ export const AuthProvider = ({
             return;
           }
 
-          try {
-            const profile = await invitationService.me();
-
-            setUser(currentUser);
-            setProfile(profile);
-            setIsAuthenticated(true);
-          } catch (error) {
-
-            console.log(error);
-          }
+          setUser(currentUser);
+          setIsAuthenticated(true);
         }
       );
 
@@ -109,6 +102,7 @@ export const AuthProvider = ({
       listener.subscription.unsubscribe();
     };
   }, []);
+
 
   const login = async ({
     email,
@@ -131,17 +125,22 @@ export const AuthProvider = ({
       };
     }
 
-    const profile = await invitationService.me();
-
     setUser(data.user);
-    setProfile(profile);
     setIsAuthenticated(true);
+
+    try {
+      const profile = await invitationService.me();
+      setProfile(profile);
+    } catch (e) {
+      console.log(e);
+    }
 
     router.push("/dashboard");
     router.refresh();
 
     return { success: true };
   };
+
 
   const logout = async () => {
     await supabase.auth.signOut();
@@ -154,6 +153,7 @@ export const AuthProvider = ({
     router.refresh();
   };
 
+  // ⏳ LOADING
   if (loading) {
     return (
       <div className="h-screen flex items-center justify-center">
@@ -162,16 +162,16 @@ export const AuthProvider = ({
     );
   }
 
-  const values: AuthValues = {
-    user,
-    profile,
-    login,
-    logout,
-    isAuthenticated,
-  };
-
   return (
-    <AuthContext.Provider value={values}>
+    <AuthContext.Provider
+      value={{
+        user,
+        profile,
+        login,
+        logout,
+        isAuthenticated,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

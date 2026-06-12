@@ -1,32 +1,34 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import reportService from "../services/report.service";
-import { PagedData } from "@/shared/http-client/kravax-response.interface";
 import { Report } from "../type/report.type";
 
-export function useReports() {
-  const [data, setData] = useState<PagedData<Report> | null>(null);
+export function useReport(id: string) {
+  const [report, setReport] = useState<Report | null>(null);
   const [loading, setLoading] = useState(true);
 
-  async function fetchReports() {
+  async function fetchReport() {
     try {
       setLoading(true);
 
-      const result = await reportService.getReports();
+      const data = await reportService.getReportById(id);
 
-      setData(result);
+      setReport(data);
+    } catch (error) {
+      console.error(error);
     } finally {
       setLoading(false);
     }
   }
 
   useEffect(() => {
-    fetchReports();
-  }, []);
+    if (!id) return;
+
+    fetchReport();
+  }, [id]);
 
   return {
-    reports: data?.items ?? [],
-    meta: data?.meta,
+    report,
     loading,
-    refetch: fetchReports,
+    refetch: fetchReport,
   };
 }

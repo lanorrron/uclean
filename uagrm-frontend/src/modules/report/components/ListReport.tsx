@@ -1,22 +1,29 @@
 "use client";
 
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import { useReports } from "../hooks/report.hook";
+import { useReports } from "../hooks/reports.hook";
 import { Chip } from "@/components/ui/chip";
 import { MapPin, Calendar, AlertCircle } from "lucide-react";
-import { IncidentType, UserType } from "../type/report.type";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
+import { formatReportDate, formatStatusLabel, getIncidentType, getStatusChipVariant, getUserType } from "../utils/utils.report";
+import { Report } from "../type/report.type";
+interface ListReportProps {
+reports:Report[];
+loading?:boolean;
+}
 
-export default function ListReport() {
-    const { reports, loading } = useReports();
+export default function ListReport({ reports, loading }: ListReportProps) {
     const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
+    
+     const handleImageError = (reportId: string) => {
+        setImageErrors(prev => ({ ...prev, [reportId]: true }));
+    };
 
     if (loading) {
         return (
-            <div className="flex flex-col items-center justify-center py-20">
-                <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-muted-foreground mt-4 font-medium">Cargando reportes...</p>
+            <div className="flex items-center justify-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
             </div>
         );
     }
@@ -28,84 +35,11 @@ export default function ListReport() {
                     <AlertCircle className="w-10 h-10 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold text-foreground">No hay reportes aún</h3>
-                <p className="text-muted-foreground mt-2">Sé el primero en reportar un incidente</p>
             </div>
         );
     }
 
-    function getUserType(value: UserType) {
-        switch (value) {
-            case UserType.STUDENT:
-                return { label: "Estudiante", icon: "🎓", color: "bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300" };
-            case UserType.TEACHER:
-                return { label: "Docente", icon: "👨‍🏫", color: "bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300" };
-            case UserType.VISITOR:
-                return { label: "Visitante", icon: "👤", color: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300" };
-            default:
-                return { label: value, icon: "👤", color: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300" };
-        }
-    }
 
-    function getIncidentType(value: IncidentType) {
-        switch (value) {
-            case IncidentType.WASTE:
-                return { label: "Residuos Sólidos", icon: "🗑️", color: "bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300" };
-            case IncidentType.BATHROOM:
-                return { label: "Baños / Sanitarios", icon: "🚽", color: "bg-teal-100 dark:bg-teal-950 text-teal-700 dark:text-teal-300" };
-            case IncidentType.LIGHTING:
-                return { label: "Iluminación", icon: "💡", color: "bg-yellow-100 dark:bg-yellow-950 text-yellow-700 dark:text-yellow-300" };
-            case IncidentType.FURNITURE:
-                return { label: "Mobiliario Dañado", icon: "🪑", color: "bg-orange-100 dark:bg-orange-950 text-orange-700 dark:text-orange-300" };
-            case IncidentType.OTHER:
-                return { label: "Otros", icon: "📌", color: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300" };
-            default:
-                return { label: value, icon: "📌", color: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300" };
-        }
-    }
-
-    function getStatusChipVariant(status: string): "error" | "success" | "warning" | "info" | "default" {
-        switch (status.toUpperCase()) {
-            case "PENDING":
-                return "error"; 
-            case "IN_PROGRESS":
-                return "info";
-            case "RESOLVED":
-                return "success";
-            case "REJECTED":
-                return "error";
-            default:
-                return "default";
-        }
-    }
-
-    function formatReportDate(date: Date | string) {
-        const reportDate = new Date(date);
-        const now = new Date();
-        const diffMs = now.getTime() - reportDate.getTime();
-        const hours = Math.floor(diffMs / (1000 * 60 * 60));
-
-        if (hours < 1) {
-            const minutes = Math.floor(diffMs / (1000 * 60));
-            if (minutes < 1) return "Hace unos segundos";
-            return `Hace ${minutes} min`;
-        }
-        if (hours <= 48) return `Hace ${hours} h`;
-
-        return reportDate.toLocaleDateString("es-BO", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-        });
-    }
-
-    const handleImageError = (reportId: string) => {
-        setImageErrors(prev => ({ ...prev, [reportId]: true }));
-    };
-
-    // Formatear el status para mostrar legible
-    const formatStatusLabel = (status: string) => {
-        return status.replaceAll("_", " ").toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
-    };
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 g-red">
@@ -184,10 +118,10 @@ export default function ListReport() {
                                             </span>
                                         </div>
 
-                                        <button className="text-primary font-semibold text-xs flex items-center gap-1 hover:gap-2 transition-all duration-200 group/btn cursor-pointer">
+                                        <a href={`/reports/${report.id}`} className="text-primary font-semibold text-xs flex items-center gap-1 hover:gap-2 transition-all duration-200 group/btn cursor-pointer">
                                             Ver Detalles
                                             <MdOutlineKeyboardArrowRight className="text-base group-hover/btn:translate-x-0.5 transition-transform" />
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>

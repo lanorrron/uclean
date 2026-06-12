@@ -1,28 +1,68 @@
-import { ClientHttp } from "@/shared/http-client/httpClient"
-import { HttpResponse, PagedData } from "@/shared/http-client/kravax-response.interface"
-import { Report } from "../type/report.type";
+import { ClientHttp } from "@/shared/http-client/httpClient";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL
+import {
+  HttpResponse,
+  PagedData,
+} from "@/shared/http-client/kravax-response.interface";
 
-async function getReports(page: number = 1, pageSize: number = 10, search?: string, status?: string) {
-    const params = new URLSearchParams({
-        page: page.toString(),
-        pageSize: pageSize.toString()
-    })
+import { GetReportsParams, Report } from "../type/report.type";
 
-    if (search) params.append("search", search);
-    if (status) params.append("status", status)
+const BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL;
 
 
-    const result = await ClientHttp.get<HttpResponse<PagedData<Report>>>(`${BASE_URL}/reports`)
-    return result.body.data
+
+async function getReports({
+  page = 1,
+  pageSize = 10,
+  status,
+  from,
+  to,
+}: GetReportsParams = {}) {
+
+  const params =
+    new URLSearchParams({
+      page: page.toString(),
+      pageSize: pageSize.toString(),
+    });
+
+  if (status) {
+    params.append("status", status);
+  }
+
+  if (from) {
+    params.append("from", from);
+  }
+
+  if (to) {
+    params.append("to", to);
+  }
+
+  const result =
+    await ClientHttp.get<
+      HttpResponse<PagedData<Report>>
+    >(
+      `${BASE_URL}/reports?${params.toString()}`
+    );
+
+  return result.body.data;
 }
 
-async function getReportById(id: string) {
-    const result = await ClientHttp.get<HttpResponse>(`${BASE_URL}/reports`)
-    return result.body.data
+async function getReportById(
+  id: string
+) {
+
+  const result =
+    await ClientHttp.get<
+      HttpResponse<Report>
+    >(
+      `${BASE_URL}/reports/${id}`
+    );
+
+  return result.body.data;
 }
+
 export default {
-    getReports,
-    getReportById
-}
+  getReports,
+  getReportById,
+};

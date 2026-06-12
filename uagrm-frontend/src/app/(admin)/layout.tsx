@@ -15,34 +15,36 @@ export default function AdminLayout({ children, }: { children: React.ReactNode; 
   const [authorized, setAuthorized] = useState<boolean | null>(null)
 
   const filteredRoutes = Navigation()
-    .filter((route:any) => {
+    .filter((route: any) => {
       if (!profile) return false;
       return route.roles?.includes(profile.role);
     })
-    .map((route:any) => ({
+    .map((route: any) => ({
       ...route,
       subMenuItems: route.subMenuItems?.filter(
-        (sub:any) =>
+        (sub: any) =>
           !sub.roles ||
           sub.roles.includes(profile!.role)
       ),
     }));
 
-useEffect(() => {
-  if (!profile) return;
+  useEffect(() => {
+    if (!profile) return;
 
-  const allowedPaths = filteredRoutes.flatMap((r:any) => [
-    r.path,
-    ...(r.subMenuItems?.map((sub:any) => sub.path) || []),
-  ]).filter(Boolean) as string[];
+    const matchPath = (base: string) =>
+      pathname === base || pathname.startsWith(`${base}/`);
 
-  if (!allowedPaths.includes(pathname)) {
-    router.replace('/not-found');
-    setAuthorized(false);
-  } else {
-    setAuthorized(true);
-  }
-}, [pathname, filteredRoutes, router]);
+    const authorized = filteredRoutes.some((route: any) =>
+      matchPath(route.path) ||
+      route.subMenuItems?.some((sub: any) => matchPath(sub.path))
+    );
+
+    if (!authorized) {
+      router.replace('/not-found');
+    }
+
+    setAuthorized(authorized);
+  }, [pathname, filteredRoutes, router, profile]);
 
 
   if (authorized === null) {

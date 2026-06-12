@@ -23,6 +23,7 @@ export type Report = {
     status: ReportStatus;
 
     created_at: Date;
+    updated_at: Date;
 
     assigned_to_id?: string | null;
 };
@@ -40,3 +41,25 @@ export enum IncidentType {
     OTHER = "OTHER",
 }
 
+export type DatePreset = "today" | "7d" | "month" | "custom";
+
+export interface GetReportsParams {
+
+  page?: number;
+
+  pageSize?: number;
+
+  status?: string;
+
+  from?: string;
+
+  to?: string;
+}
+export interface ReportQuery {
+  status?: ReportStatus;
+
+  from?: string;
+  to?: string;
+
+
+}
