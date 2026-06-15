@@ -49,7 +49,6 @@ export class ReportController {
     @Public()
     @Get('')
     async getReports(@Req() req: Request, @Query() query: PaginationReportDto) {
-        console.log(query)
         const result = await this.reportService.reports(query);
         return HttpResponse.Success(result);
     }

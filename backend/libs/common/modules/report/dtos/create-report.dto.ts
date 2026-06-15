@@ -9,6 +9,7 @@ import {
 import { Type } from "class-transformer";
 
 import {
+  Area,
   IncidentType,
   UserType,
 } from "@prisma/client";
@@ -23,6 +24,9 @@ export class CreateReportDto {
 
   @IsEnum(IncidentType)
   incidentType: IncidentType;
+  
+  @IsEnum(Area)
+  area:Area;
 
   @IsOptional()
   @IsString()

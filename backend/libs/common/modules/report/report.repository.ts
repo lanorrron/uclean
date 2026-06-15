@@ -3,7 +3,6 @@ import { Injectable } from "@nestjs/common";
 import { Report, ReportStatus } from "@prisma/client";
 import { DatabaseService } from "libs/common/database/database.service";
 import { CreateReportDto } from "./dtos/create-report.dto";
-import { ReportQueryDto } from "./dtos/report-query.dto";
 import { PaginationReportDto } from "./dtos/pagination-report.dto";
 
 @Injectable()
@@ -23,6 +22,7 @@ export class ReportRepository {
                 latitude: dto.latitude,
                 longitude: dto.longitude,
                 image_url: imageUrl,
+                area:dto.area,
             },
         });
     }
@@ -56,7 +56,7 @@ export class ReportRepository {
     }
 
     async reports(query: PaginationReportDto): Promise<{ items: Report[]; totalItems: number }> {
-        const {page,pageSize, from, status, to}= query
+        const {page,pageSize, from, status, to, area}= query
 
         const skip = (page - 1) * pageSize;
 
@@ -66,7 +66,7 @@ export class ReportRepository {
 
        if (status) {
             where.AND.push({
-                status: query.status,
+                status: status,
             });
         }
 
@@ -85,6 +85,13 @@ export class ReportRepository {
                 },
             });
         }
+
+            if (area){
+                where.AND.push({
+
+                    area: area
+                })
+            }
 
         if (where.AND.length === 0) {
             delete where.AND;

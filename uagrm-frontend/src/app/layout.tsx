@@ -79,6 +79,7 @@ export default function RootLayout({
           position="top-right"
           toastOptions={{
             duration: 3500,
+            position:'top-center',
           }}
         />
       </body>

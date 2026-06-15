@@ -27,62 +27,7 @@ type NotificationType ={
 
 export const NotificationsDropdown = () => {
     const [notifications, setNotifications] = useState<NotificationType[]>([
-        {
-            id: 2,
-            title: 'Payment Processed',
-            description: 'Invoice #12345 paid successfully.',
-            dateTime: '5 hr ago',
-            image: 'https://cdn.icon-icons.com/icons2/3188/PNG/512/payment_icon_194171.png',
-            status: 'new'
-        },
-        {
-            id: 3,
-            title: 'System Error',
-            description: 'Payment API error encountered.',
-            dateTime: '12 hr ago',
-            image: '',
-            status: 'new'
-        },
-        {
-            id: 4,
-            title: 'Settings Updated',
-            description: 'Admin updated notification settings.',
-            dateTime: '2023-11-13 17:00',
-            image: 'https://icons-for-free.com/iff/png/512/gear+machine+office+radio+settings+setting+settings+icon-1320183166217702456.png',
-            status: 'read'
-        },
-        {
-            id: 5,
-            title: 'Support Request',
-            description: 'User needs help with billing module.',
-            dateTime: '2023-11-13 15:45',
-            image: '',
-            status: 'read'
-        },
-        {
-            id: 6,
-            title: 'Report Generated',
-            description: 'Monthly activity report ready.',
-            dateTime: '2023-11-13 14:20',
-            image: '',
-            status: 'new'
-        },
-        {
-            id: 7,
-            title: 'Profile Update',
-            description: 'Carlos Mendoza updated profile.',
-            dateTime: '2023-11-12 20:30',
-            image: '',
-            status: 'read'
-        },
-        {
-            id: 8,
-            title: 'Backup Complete',
-            description: 'Daily system backup successful.',
-            dateTime: '2023-11-12 03:00',
-            image: '',
-            status: 'read'
-        }
+  
     ])
 
     const countNewNotifications = notifications.filter(notification => notification.status === 'new').length

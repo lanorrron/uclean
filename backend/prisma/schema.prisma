@@ -8,11 +8,12 @@ datasource db {
 }
 
 model User {
-  id    String  @id @default(uuid())
-  email String  @unique
-  name  String?
+  id         String  @id @default(uuid())
+  email      String  @unique
+  first_name String?
+  last_name  String?
 
-  role Role @default(AGENT)
+  role Role
 
   created_at DateTime  @default(now())
   updated_at DateTime  @default(now()) @updatedAt
@@ -24,8 +25,8 @@ model User {
 
 enum Role {
   ADMIN
-  MODERATOR
-  AGENT
+  MANTENIMIENTO
+  LIMPIEZA
 }
 
 model Report {
@@ -42,6 +43,7 @@ model Report {
 
   latitude  Float
   longitude Float
+  area      Area 
 
   status ReportStatus @default(PENDING)
 
@@ -58,6 +60,11 @@ enum ReportStatus {
   IN_PROGRESS
   RESOLVED
   REJECTED
+}
+
+enum Area {
+  LIMPIEZA
+  MANTENIMIENTO
 }
 
 model UserInvitation {

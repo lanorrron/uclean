@@ -24,8 +24,6 @@ import { DatePreset, IncidentType } from "../type/report.type";
                 return { label: "Iluminación", icon: "💡", color: "bg-yellow-100 dark:bg-yellow-950 text-yellow-700 dark:text-yellow-300" };
             case IncidentType.FURNITURE:
                 return { label: "Mobiliario Dañado", icon: "🪑", color: "bg-orange-100 dark:bg-orange-950 text-orange-700 dark:text-orange-300" };
-            case IncidentType.OTHER:
-                return { label: "Otros", icon: "📌", color: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300" };
             default:
                 return { label: value, icon: "📌", color: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300" };
         }

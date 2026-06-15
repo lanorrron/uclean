@@ -5,7 +5,7 @@ import { Role } from "../types/user.type";
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 async function accepInvitation() {
-    const result = await ClientHttp.put<HttpResponse>(`${API_URL}/invitations/accept`)
+    const result = await ClientHttp.post<HttpResponse>(`${API_URL}/invitations/accept`)
     return result.body.data
 }
 async function sendInvitation(email: string, role: Role) {

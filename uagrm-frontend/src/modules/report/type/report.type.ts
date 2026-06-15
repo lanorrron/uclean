@@ -1,43 +1,49 @@
 import { User, UserType } from "@/modules/user/types/user.type";
 
 export enum ReportStatus {
-    PENDING = "PENDING",
-    IN_PROGRESS = "IN_PROGRESS",
-    RESOLVED = "RESOLVED",
-    REJECTED = "REJECTED",
+  PENDING = "PENDING",
+  IN_PROGRESS = "IN_PROGRESS",
+  RESOLVED = "RESOLVED",
+  REJECTED = "REJECTED",
 }
 
 export type Report = {
-    id: string;
+  id: string;
 
-    user_type: UserType;
-    register_number: string;
+  user_type: UserType;
+  register_number: string;
 
-    incident_type: IncidentType;
+  incident_type: IncidentType;
 
-    description?: string | null;
+  description?: string | null;
 
-    image_url?: string | null;
+  image_url?: string | null;
 
-    latitude: number;
-    longitude: number;
+  latitude: number;
+  longitude: number;
 
-    status: ReportStatus;
+  status: ReportStatus;
+  area: AreaType;
 
-    created_at: Date;
-    updated_at: Date;
+  created_at: Date;
+  updated_at: Date;
 
-    assigned_to_id?: string | null;
-    assigned_to?: User
+  assigned_to_id?: string | null;
+  assigned_to?: User
 };
+
+export enum AreaType {
+  LIMPIEZA = "LIMPIEZA",
+  MANTENIMIENTO = "MANTENIMIENTO",
+  OTROS = "OTROS",
+}
 
 
 export enum IncidentType {
-    WASTE = "WASTE",
-    BATHROOM = "BATHROOM",
-    LIGHTING = "LIGHTING",
-    FURNITURE = "FURNITURE",
-    OTHER = "OTHER",
+  WASTE = "WASTE",
+  BATHROOM = "BATHROOM",
+  LIGHTING = "LIGHTING",
+  FURNITURE = "FURNITURE",
 }
 
 export type DatePreset = "today" | "7d" | "month" | "custom";

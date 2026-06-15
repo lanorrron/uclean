@@ -1,4 +1,5 @@
-import { Public } from "@app/auth/decorators/auth.decorator";
+import { AcceptInvitationAuth } from "@app/auth/decorators/accept-invitation.decorator";
+import { Roles } from "@app/auth/decorators/auth.decorator";
 import { HttpResponse } from "@app/common/errors/httpResponse";
 import {
     Body,
@@ -8,6 +9,7 @@ import {
     Put,
     Req,
 } from "@nestjs/common";
+import { Role } from "@prisma/client";
 import { CreateUserInvitationDto } from "libs/common/modules/invitation-user/dtos/create-invitation.dto";
 import { UserInvitationService } from "libs/common/modules/invitation-user/user-invitation.service";
 
@@ -17,7 +19,7 @@ export class UserInvitationController {
         private readonly service: UserInvitationService
     ) { }
 
-    @Public()
+    @Roles(Role.ADMIN)
     @Post("invite")
     async inviteUser(
         @Body()
@@ -26,10 +28,12 @@ export class UserInvitationController {
         return HttpResponse.Success(result);
     }
 
+    @AcceptInvitationAuth()
     @Post("accept")
     async acceptInvitation(@Req() req: any) {
+        console.log("REQ USER", req.user);
         const result = await this.service.acceptInvitation(
-            req.user.sub,
+            req.user.supabaseId,
             req.user.email
         );
         return HttpResponse.Success(result);
@@ -41,6 +45,7 @@ export class UserInvitationController {
         return HttpResponse.Success(result);
     }
 
+    @Roles(Role.ADMIN)
     @Put(':id/cancel')
     async cancelInvitation(@Req() req: any) {
         const result = await this.service.cancelInvitation(req.params.id);

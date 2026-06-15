@@ -1,8 +1,9 @@
 export interface User {
   id: string;
   email: string;
-  name: string | null;
-  role: "ADMIN" | "MODERATOR" | "AGENT";
+  first_name:string;
+  last_name: string | null;
+  role: Role
   created_at: string;
   updated_at: string;
 }
@@ -15,8 +16,8 @@ export enum UserType {
 
 export enum Role {
   ADMIN = "ADMIN",
-  MODERATOR = "MODERATOR",
-  AGENT = "AGENT",
+  MANTENIMINETO = "MANTENIMIENTO",
+  LIMPIEZA = "LIMPIEZA",
 }
 export interface UserPlusInvitations {
   users: User[];

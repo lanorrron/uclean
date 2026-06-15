@@ -75,6 +75,8 @@ export class UserInvitationService {
 
         return user;
     }
+
+    
     async listinvitations(){
         return await this.repo.listInvitations();
     }

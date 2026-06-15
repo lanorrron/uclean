@@ -5,11 +5,9 @@ import {
     IsInt,
     IsOptional,
     Min,
-    ValidateNested,
 } from "class-validator";
 
-import { ReportQueryDto } from "./report-query.dto";
-import { ReportStatus } from "@prisma/client";
+import { Area, ReportStatus } from "@prisma/client";
 
 export class PaginationReportDto {
 
@@ -38,4 +36,10 @@ export class PaginationReportDto {
     @Type(() => Date)
     @IsDate()
     to?: Date;
+
+    @IsOptional()
+    @IsEnum(Area)
+    area?: Area;
+
+
 }

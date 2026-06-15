@@ -224,6 +224,37 @@ export default function DashboardPage() {
   const resolutionRate = Math.round((parseInt(resolvedCount) / parseInt(totalCount)) * 100) || 0;
 
   return (
+    <div className="relative">
+<div
+  className="
+    absolute inset-0 z-50
+    backdrop-blur-[6px]
+    bg-background/30
+    flex items-start justify-center
+    pt-60
+  "
+>
+  <div
+    className="
+      rounded-2xl
+      border border-border/50
+      bg-background/80
+      backdrop-blur-xl
+      px-8 py-6
+      shadow-2xl
+      text-center
+      max-w-md
+    "
+  >
+<h2 className="text-2xl font-bold">
+  🚧 Dashboard en construcción
+</h2>
+
+<p className="text-muted-foreground mt-2 text-sm">
+  Estamos preparando las métricas y analíticas del sistema.
+</p>
+  </div>
+</div>
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 p-6 space-y-6">
       
       {/* HEADER */}
@@ -459,6 +490,8 @@ export default function DashboardPage() {
           <span className="flex items-center gap-1">🌱 +5 esta semana</span>
         </div>
       </div>
+    </div>
+
     </div>
   );
 }

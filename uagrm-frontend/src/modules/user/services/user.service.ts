@@ -1,6 +1,6 @@
 import { ClientHttp } from "@/shared/http-client/httpClient";
 import { HttpResponse } from "@/shared/http-client/kravax-response.interface";
-import { UserPlusInvitations } from "../types/user.type";
+import { Role, UserPlusInvitations } from "../types/user.type";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -11,7 +11,7 @@ async function me() {
 
     return result.body.data;
 }
- async function  getAll() {
+async function getAll() {
     const result = await ClientHttp.get<HttpResponse<UserPlusInvitations>>(
         `${API_URL}/users`
     );
@@ -27,8 +27,28 @@ async function remove(id: string) {
     return result.body.data;
 }
 
+async function completeProfile(data: { firstName: string; lastName: string }) {
+    const result = await ClientHttp.put<HttpResponse>(
+        `${API_URL}/users/complete-profile`,
+        data
+    );
+
+    return result.body.data;
+}
+async function updateRole(userId: string, role: Role) {
+    const result =
+        await ClientHttp.put<HttpResponse>(
+            `${API_URL}/users/${userId}/update-role`,
+            { role }
+        );
+
+    return result.body.data;
+}
+
 export default {
     me,
     getAll,
-    remove
+    remove,
+    completeProfile,
+    updateRole
 }

@@ -1,18 +1,6 @@
 // services/reportService.ts
-export interface ReportData {
-  userType: string
-  registerNumber: string
-  incidentType: string
-  description: string
-  latitude: number | null
-  longitude: number | null
-}
 
-export interface ReportResponse {
-  success: boolean
-  message: string
-  reportId?: string
-}
+import { ReportData, ReportResponse } from "../types/report.types"
 
 const BASE_URL= process.env.NEXT_PUBLIC_API_URL
 
@@ -26,13 +14,13 @@ export const sendReport = async (data: ReportData, photoFile: File | null): Prom
   formData.append('description', data.description)
   formData.append('latitude', String(data.latitude))
   formData.append('longitude', String(data.longitude))
+  formData.append('area',String(data.area))
   
   // Foto
   if (photoFile) {
     formData.append('image', photoFile)
   }
   
-  // Cambia esta URL por la de tu backend
   const response = await fetch(`${BASE_URL}/reports`, {
     method: 'POST',
     body: formData,

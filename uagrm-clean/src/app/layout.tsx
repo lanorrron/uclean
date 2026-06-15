@@ -7,7 +7,6 @@ export const metadata: Metadata = {
   description: 'Plataforma tecnológica para el cuidado y limpieza del campus universitario. Reporta incidentes en tiempo real.',
   keywords: 'UAGRM, campus limpio, sostenibilidad, reporte de limpieza',
   authors: [{ name: 'Universidad Gabriel René Moreno' }],
-  viewport: 'width=device-width, initial-scale=1.0',
   robots: 'index, follow',
   openGraph: {
     title: 'Campus Limpio UAGRM',

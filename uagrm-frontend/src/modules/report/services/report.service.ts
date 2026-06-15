@@ -5,7 +5,7 @@ import {
   PagedData,
 } from "@/shared/http-client/kravax-response.interface";
 
-import { GetReportsParams, Report } from "../type/report.type";
+import { AreaType, GetReportsParams, Report } from "../type/report.type";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_URL;
@@ -37,6 +37,8 @@ async function getReports({
   if (to) {
     params.append("to", to);
   }
+
+
 
   const result =
     await ClientHttp.get<

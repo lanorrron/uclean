@@ -1,76 +1,49 @@
-// src/proxy.ts (o middleware.ts según tu versión)
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import createClient from "@/lib/supabase/server"; // ESTE
 
-export async function proxy(request: NextRequest) {
-  let response = NextResponse.next({
-    request,
-  });
+export async function proxy(req: NextRequest) {
+  const res = NextResponse.next();
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-          response = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options)
-          );
-        },
-      },
-    }
-  );
+  const supabase = await createClient();
 
-  // 🔥 IMPORTANTE: Usa getUser() para forzar validación del token
-  const { data: { user }, error } = await supabase.auth.getUser();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-  const path = request.nextUrl.pathname;
-  
-  // Rutas protegidas
-const protectedPaths = [
-  "/dashboard",
-  "/settings",
-  "/wallets",
-  "/payments",
-  "/organization",
-  "/developers",
-  "/reset-password",
-  "/accept-invite", // 👈 IMPORTANTE
-];
+  const path = req.nextUrl.pathname;
+  const protectedPaths = ["/dashboard", "/settings", "/wallets", "/payments", "/organization/members", "developers", "reset-password"];
   const authPaths = ["/login", "/register", "/forgot-password"];
 
   const isProtected = protectedPaths.some((p) => path.startsWith(p));
   const isAuthPath = authPaths.some((p) => path.startsWith(p));
 
-  // Redirigir a login si ruta protegida y no hay usuario
-  if (isProtected && !user) {
-    console.log("🔒 Redirigiendo a login desde:", path);
-    const url = new URL("/login", request.url);
+  if (isProtected && !session) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/login";
     url.searchParams.set("next", path);
     return NextResponse.redirect(url);
   }
 
-  // Redirigir a dashboard si está en login con sesión
-  if (isAuthPath && user) {
-    console.log("✅ Usuario autenticado en login, redirigiendo a dashboard");
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+  if (isAuthPath && session) {
+    return NextResponse.redirect(new URL('/dashboard', req.url));
   }
 
-  return response;
+  return res;
 }
 
 export const config = {
   matcher: [
     "/dashboard/:path*",
+    "/settings/:path*",
+    "/wallets/:path*",
+    "/payments/:path*",
+    "/organization/:path*",
+    "/developers/:path*",
+    "/reset-password/:path",
+
     "/login",
     "/register",
     "/forgot-password",
-    "/accept-invite", 
   ],
 };

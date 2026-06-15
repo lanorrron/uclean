@@ -46,8 +46,8 @@ export class ReportService {
     }
 
     async reports(data: PaginationReportDto): Promise<PagedData<Report>> {
-        const { page, pageSize, from, status, to } = data;
-        const { items, totalItems } = await this.reportRepository.reports({ page, pageSize, from, status, to });
+        const { page, pageSize, from, status, to ,area} = data;
+        const { items, totalItems } = await this.reportRepository.reports({ page, pageSize, from, status, to,area });
         const totalPages = Math.ceil(totalItems / pageSize);
         return {
             items,

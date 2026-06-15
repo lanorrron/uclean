@@ -53,11 +53,15 @@ const Header = ({ routes }: Props) => {
     }
   }, []);
 
+
+
   return (
     <div className="sticky top-0 h-16 px-4 z-10">
       <div
         id="myDiv"
-        className=" sticky top-0 h-16 px-4 rounded-xl transition-all p-2 grid grid-cols-3 items-center z-10"
+        className={`sticky top-0 h-16 px-4 rounded-xl transition-all p-2 grid grid-cols-3 items-center z-10
+    ${openDrawer ? "bg-background" : "bg-background/30 backdrop-blur-sm"}
+  `}
       >
         <div className="col-start-1 flex justify-start items-center gap-2 ">
           {settings.navHidden && (

@@ -12,8 +12,6 @@ export const AUTH_METADATA = {
 export const Public = () =>
   SetMetadata(AUTH_METADATA.PUBLIC, true);
 
-/**
- * Role-based access control
- */
+
 export const Roles = (...roles: Role[]) =>
   SetMetadata(AUTH_METADATA.ROLES, roles);

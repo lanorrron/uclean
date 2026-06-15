@@ -15,14 +15,12 @@ export const useCamera = () => {
 
   const startCamera = useCallback(async () => {
     if (!videoRef.current) {
-      console.error('Video element not found')
       setCameraError('Elemento de video no encontrado')
       return
     }
     
     try {
       setCameraError(null)
-      console.log('Solicitando cámara...')
       
       const stream = await requestCamera(videoRef.current)
       streamRef.current = stream
@@ -40,7 +38,6 @@ export const useCamera = () => {
       })
       
       setIsCameraReady(true)
-      console.log('Cámara iniciada correctamente')
       return stream
       
     } catch (error) {
@@ -52,41 +49,34 @@ export const useCamera = () => {
 
   const takePhoto = useCallback(async () => {
     if (!videoRef.current || !canvasRef.current) {
-      console.error('Video o canvas no disponibles')
       return null
     }
     
     if (!isCameraReady) {
-      console.error('Cámara no está lista')
       return null
     }
     
     try {
-      console.log('Tomando foto...')
       const file = await capturePhoto(videoRef.current, canvasRef.current)
       
       if (file) {
-        // Limpiar preview anterior si existe
         if (photoPreview) {
           URL.revokeObjectURL(photoPreview)
         }
         
         setPhoto(file)
         setPhotoPreview(URL.createObjectURL(file))
-        console.log('Foto capturada:', file.name, file.size)
       }
       
       return file
       
     } catch (error) {
-      console.error('Error al tomar foto:', error)
       setCameraError('Error al capturar la foto')
       return null
     }
   }, [isCameraReady, photoPreview])
 
   const stopCameraStream = useCallback(() => {
-    console.log('Deteniendo cámara...')
     stopCamera(streamRef.current)
     streamRef.current = null
     setIsCameraReady(false)

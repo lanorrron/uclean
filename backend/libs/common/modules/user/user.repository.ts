@@ -26,7 +26,7 @@ async findMany(role?: Role) {
         return this.db.user.create({
             data: {
                 ...data,
-                role: data.role ?? Role.AGENT
+                role: data.role
             }
         });
     }
@@ -34,6 +34,13 @@ async findMany(role?: Role) {
         return this.db.user.update({
             where: { id },
             data: { deleted_at: new Date() }
+        });
+    }
+
+    async update(id: string, data: Partial<Prisma.UserUpdateInput>) {
+        return this.db.user.update({
+            where: { id },
+            data,
         });
     }
 

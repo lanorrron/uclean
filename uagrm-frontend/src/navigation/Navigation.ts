@@ -15,12 +15,12 @@ export const Navigation = (): MenuNavigationTypes => {
     {
       title: "Dashboards",
       icon: LayoutDashboard,
-      roles: [Role.ADMIN, Role.MODERATOR, Role.AGENT],
+      roles: [Role.ADMIN, Role.LIMPIEZA, Role.MANTENIMINETO],
       subMenuItems: [
         {
           title: "Vista rápida",
           path: "/dashboard",
-          roles: [Role.ADMIN, Role.MODERATOR, Role.AGENT],
+          roles: [Role.ADMIN, Role.LIMPIEZA, Role.MANTENIMINETO],
         },
       ]
     },
@@ -29,13 +29,13 @@ export const Navigation = (): MenuNavigationTypes => {
       title: "Reportes",
       path: "/reports",
       icon: NotebookPen,
-      roles: [Role.ADMIN, Role.MODERATOR, Role.AGENT],
+      roles: [Role.ADMIN, Role.LIMPIEZA, Role.MANTENIMINETO],
     },
-        {
+    {
       title: "Usuarios",
       path: "/users",
       icon: User,
-      roles: [Role.ADMIN, Role.MODERATOR, Role.AGENT],
+      roles: [Role.ADMIN, Role.LIMPIEZA, Role.MANTENIMINETO],
     },
 
   ];

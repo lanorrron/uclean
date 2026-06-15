@@ -94,35 +94,36 @@ export default function CreateUser({ onCreated }: Props) {
           <DialogTitle>Invitar usuario</DialogTitle>
         </DialogHeader>
 
-       <div className="space-y-3">
-  {/* EMAIL */}
-  <Input
-    placeholder="Correo"
-    value={email}
-    onChange={(e) => setEmail(e.target.value)}
-    className="h-11"
-  />
+        <div className="space-y-3">
+          {/* EMAIL */}
+          <Input
+            placeholder="Correo"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="h-11"
+          />
 
-  {/* ROLE SELECT */}
-  <Select value={role} onValueChange={(value) => setRole(value as Role)}>
-    <SelectTrigger className="h-11! w-full">
-      <SelectValue placeholder="Selecciona un rol" />
-    </SelectTrigger>
+          {/* ROLE SELECT */}
+          <Select value={role} onValueChange={(value) => setRole(value as Role)}>
+            <SelectTrigger className="h-11! w-full">
+              <SelectValue placeholder="Selecciona un rol" />
+            </SelectTrigger>
 
-    <SelectContent>
-      <SelectItem value={Role.ADMIN}>Admin</SelectItem>
-      <SelectItem value={Role.AGENT}>Agente</SelectItem>
-      <SelectItem value={Role.MODERATOR}>Moderador</SelectItem>
-    </SelectContent>
-  </Select>
+            <SelectContent>
+              <SelectItem value={Role.ADMIN}>Admin</SelectItem>
+              <SelectItem value={Role.AGENT}>Agente</SelectItem>
+              <SelectItem value={Role.MODERATOR}>Moderador</SelectItem>
+            </SelectContent>
+          </Select>
 
-  {/* ERROR */}
-  {(localError || error) && (
-    <p className="text-sm text-red-500">
-      {localError || error}
-    </p>
-  )}
-</div>
+          {/* ERROR */}
+          {(localError || error) && (
+            <p className="text-sm text-red-500">
+              {localError || error}
+            </p>
+          )}
+        </div>
 
         <Button
           className="w-full"

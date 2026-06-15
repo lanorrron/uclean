@@ -1,0 +1,5 @@
+-- CreateEnum
+CREATE TYPE "Area" AS ENUM ('LIMPIEZA', 'MANTENIMIENTO');
+
+-- AlterTable
+ALTER TABLE "Report" ADD COLUMN     "are" "Area" NOT NULL DEFAULT 'LIMPIEZA';

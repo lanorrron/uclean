@@ -1,6 +1,7 @@
 // hooks/useReportForm.ts
 import { useState } from 'react'
 import { sendReport } from '../services/reportService'
+import { IncidentType, incidentTypeToArea } from '../types/report.types'
 
 const userTypes = [
   { value: '', label: 'Selecciona tu perfil', disabled: true },
@@ -12,11 +13,10 @@ const userTypes = [
 
 const incidentTypes = [
   { value: '', label: 'Selecciona el tipo de problema', disabled: true },
-  { value: 'WASTE', label: '🗑️ Residuos Sólidos' },
-  { value: 'BATHROOM', label: '🚽 Baños / Sanitarios' },
-  { value: 'LIGHTING', label: '💡 Iluminación' },
-  { value: 'FURNITURE', label: '🪑 Mobiliario Dañado' },
-  { value: 'OTHER', label: '📌 Otros' }
+  { value: IncidentType.WASTE, label: '🗑️ Residuos Sólidos' },
+  { value: IncidentType.BATHROOM, label: '🚽 Baños / Sanitarios' },
+  { value: IncidentType.LIGHTING, label: '💡 Iluminación' },
+  { value: IncidentType.FURNITURE, label: '🪑 Mobiliario Dañado' },
 ]
 
 export const useReportForm = () => {
@@ -24,7 +24,8 @@ export const useReportForm = () => {
     userType: '',
     registerNumber: '',
     incidentType: '',
-    description: ''
+    description: '',
+    area:''
   })
 
   const [location, setLocation] = useState<{ lat: number | null; lon: number | null }>({
@@ -43,7 +44,7 @@ export const useReportForm = () => {
     setLocation({ lat, lon })
   }
 
-  // VALIDATE FORM - Retorna objeto con isValid y error
+
   const validateForm = (photo: File | null): { isValid: boolean; error: string | null } => {
     if (!formData.userType) {
       return { isValid: false, error: 'Selecciona tu vínculo universitario' }
@@ -71,6 +72,7 @@ export const useReportForm = () => {
   // SUBMIT REPORT - Retorna objeto con success y error
   const submitReport = async (photo: File | null): Promise<{ success: boolean; error?: string }> => {
     setIsSubmitting(true)
+    const area = incidentTypeToArea[formData.incidentType]
 
     try {
       await sendReport({
@@ -79,7 +81,8 @@ export const useReportForm = () => {
         incidentType: formData.incidentType,
         description: formData.description,
         latitude: location.lat,
-        longitude: location.lon
+        longitude: location.lon,
+        area:area
       }, photo)
 
       setSubmitted(true)
@@ -89,7 +92,8 @@ export const useReportForm = () => {
         userType: '',
         registerNumber: '',
         incidentType: '',
-        description: ''
+        description: '',
+        area:''
       })
       setLocation({ lat: null, lon: null })
 
@@ -110,7 +114,8 @@ export const useReportForm = () => {
       userType: '',
       registerNumber: '',
       incidentType: '',
-      description: ''
+      description: '',
+      area:''
     })
     setLocation({ lat: null, lon: null })
     setSubmitted(false)

@@ -19,6 +19,9 @@ import CreateUser from "@/modules/user/components/InviteUser";
 import DeleteUser from "@/modules/user/components/DeleteUser";
 import UpdateUser from "@/modules/user/components/UpdateUser";
 import { useCancelInvitation } from "@/modules/user/hooks/useCancelInvitation";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { useAuth } from "@/hooks/useAuth";
+import { Role } from "@/modules/user/types/user.type";
 
 const UsersPage = () => {
 
@@ -28,6 +31,8 @@ const UsersPage = () => {
         loading,
         refetch,
     } = useUsers();
+
+    const {profile} = useAuth();
 
     const { cancelInvitation } = useCancelInvitation();
 
@@ -41,7 +46,10 @@ const UsersPage = () => {
 
         return users.filter(
             (user) =>
-                user.name?.toLowerCase().includes(value) ||
+                user.first_name
+                    ?.toLowerCase().includes(value) ||
+                user.last_name
+                    ?.toLowerCase().includes(value) ||
                 user.email.toLowerCase().includes(value) ||
                 user.role.toLowerCase().includes(value)
         );
@@ -148,13 +156,13 @@ const UsersPage = () => {
                             <div className="flex items-center gap-3 min-w-0">
 
                                 <div className="h-11 w-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-semibold text-sm flex-shrink-0">
-                                    {getInitials(user.name)}
+                                    {getInitials(user.first_name + " " + user.last_name)}
                                 </div>
 
                                 <div className="min-w-0">
 
                                     <h3 className="font-medium truncate">
-                                        {user.name}
+                                        {user.first_name} {user.last_name}
                                     </h3>
 
                                     <p className="text-sm text-muted-foreground truncate">
@@ -170,7 +178,7 @@ const UsersPage = () => {
                                 </div>
                             </div>
 
-                            {/* Actions */}
+       
                             <div className="flex items-center gap-2 self-end md:self-auto">
                                 <UpdateUser user={user} onUpdated={refetch} />
                                 <DeleteUser userId={user.id} onDeleted={refetch} />
@@ -190,8 +198,6 @@ const UsersPage = () => {
 
             </div>
 
-
-            {/* ================= INVITATIONS SECTION ================= */}
             {invitations.length > 0 && (
                 <div className="mt-10 space-y-3">
 
@@ -226,15 +232,21 @@ const UsersPage = () => {
                                 {/* Actions */}
                                 <div className="flex items-center gap-2 self-end md:self-auto">
 
-                                    <button
-                                        className="text-sm px-3 py-1 border border-red-500 text-red-500 rounded-md hover:bg-red-500/10"
-                                        onClick={async () => {
-                                            await cancelInvitation(inv.id);
-                                            refetch();
-                                        }}
-                                    >
-                                        Cancelar
-                                    </button>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <button className="text-sm px-3 py-1 border border-red-500 text-red-500 rounded-md hover:bg-red-500/10" > Cancelar </button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle> ¿Cancelar invitación? </AlertDialogTitle>
+                                                <AlertDialogDescription> Esta acción cancelará la invitación enviada a{" "} <span className="font-medium"> {inv.email} </span>. </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel> Volver </AlertDialogCancel>
+                                                <AlertDialogAction className="bg-red-500 hover:bg-red-600" onClick={async () => { await cancelInvitation(inv.id); refetch(); }} > Sí, cancelar </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
 
                                 </div>
 

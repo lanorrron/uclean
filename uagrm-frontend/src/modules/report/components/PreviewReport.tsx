@@ -46,7 +46,7 @@ export default function PreviewReport({ id }: Props) {
   }
 
   return (
-    <div className=" mx-auto p-4 md:p-6 space-y-6">
+    <div className="space-y-6">
       <AssignmentReport
       assignedTo={report.assigned_to}
         onAssign={async (worker) => {
