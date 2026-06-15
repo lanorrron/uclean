@@ -6,11 +6,11 @@ export const rolesArray = [
         label: "Admin",
     },
     {
-        value: Role.AGENT,
-        label: "Agente",
+        value: Role.LIMPIEZA,
+        label: "Limpieza",
     },
     {
-        value: Role.MODERATOR,
-        label: "Moderador",
+        value: Role.MANTENIMINETO,
+        label: "Mantenimiento",
     },
 ];

@@ -70,7 +70,7 @@ export default function AssignmentReportModal({
 
   const filteredWorkers = users.filter(
     (worker) =>
-      worker.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      worker.first_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       worker.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       worker.role.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -158,12 +158,12 @@ export default function AssignmentReportModal({
                       }
                     `}
                   >
-                    {getInitials(worker.name)}
+                    {getInitials(worker.first_name + ' ' + worker.last_name)}
                   </div>
 
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-sm text-foreground">
-                      {worker.name}
+                      {worker.first_name}
                     </p>
 
                     <p className="text-xs text-muted-foreground">

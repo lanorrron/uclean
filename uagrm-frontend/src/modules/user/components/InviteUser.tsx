@@ -112,8 +112,8 @@ export default function CreateUser({ onCreated }: Props) {
 
             <SelectContent>
               <SelectItem value={Role.ADMIN}>Admin</SelectItem>
-              <SelectItem value={Role.AGENT}>Agente</SelectItem>
-              <SelectItem value={Role.MODERATOR}>Moderador</SelectItem>
+              <SelectItem value={Role.LIMPIEZA}>limpieza</SelectItem>
+              <SelectItem value={Role.MANTENIMINETO}>Mantenimiento</SelectItem>
             </SelectContent>
           </Select>
 
