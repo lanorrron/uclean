@@ -227,7 +227,7 @@ export default function DashboardPage() {
     <div className="relative">
 <div
   className="
-    absolute inset-0 z-50
+    absolute inset-0 z-5
     backdrop-blur-[6px]
     bg-background/30
     flex items-start justify-center
