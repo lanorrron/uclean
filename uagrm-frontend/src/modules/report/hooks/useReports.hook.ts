@@ -13,16 +13,11 @@ import {
 } from "@/shared/http-client/kravax-response.interface";
 
 import {
+  GetReportsParams,
   Report,
-  ReportQuery,
 } from "../type/report.type";
 
-interface UseReportsProps
-  extends ReportQuery {
 
-  page?: number;
-  pageSize?: number;
-}
 
 export function useReports({
   page = 1,
@@ -30,7 +25,10 @@ export function useReports({
   status,
   from,
   to,
-}: UseReportsProps) {
+  area,
+  assignedToId,
+  unassignedOnly,
+}: GetReportsParams) {
 
   const [data, setData] =
     useState<PagedData<Report> | null>(null);
@@ -43,7 +41,7 @@ export function useReports({
 
   async function fetchReports() {
 
-    // 🔥 evita request duplicada
+
     if (isFetching.current) return;
 
     try {
@@ -59,13 +57,15 @@ export function useReports({
           status,
           from,
           to,
+          area, 
+          assignedToId,
+          unassignedOnly
         });
 
       setData(result);
 
     } catch (error) {
 
-      console.log(error);
 
     } finally {
 

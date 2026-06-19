@@ -26,6 +26,13 @@ export const Navigation = (): MenuNavigationTypes => {
     },
 
     {
+      title: "Mis Tareas",
+      path: "/tasks",
+      icon: User,
+      roles: [ Role.LIMPIEZA, Role.MANTENIMINETO],
+    },
+
+    {
       title: "Reportes",
       path: "/reports",
       icon: NotebookPen,
@@ -37,6 +44,7 @@ export const Navigation = (): MenuNavigationTypes => {
       icon: User,
       roles: [Role.ADMIN, Role.LIMPIEZA, Role.MANTENIMINETO],
     },
+
 
   ];
   return routes;

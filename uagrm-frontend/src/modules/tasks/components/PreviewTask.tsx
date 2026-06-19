@@ -1,23 +1,24 @@
 "use client";
 
-import { useReport } from "../hooks/useReport.hook";
-
-import ReportInfo from "./ReportInfo";
-import ReportMap from "./ReportMap";
-import ReportTimeline from "./ReportTimeline";
-
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, FileText } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+import ReportInfo from "@/modules/report/components/ReportInfo";
+import ReportMap from "@/modules/report/components/ReportMap";
+import ReportTimeline from "@/modules/report/components/ReportTimeline";
+import SolveReport from "@/modules/report/components/SolveReport";
+import { useReport } from "@/modules/report/hooks/useReport.hook";
 import { AlertTriangle } from "lucide-react";
-import AssignmentReport from "./AssignmentReport";
-import { useAssignment } from "../hooks/useAssignment.hook";
 
 interface Props {
   id: string;
 }
 
-export default function PreviewReport({ id }: Props) {
+export default function PreviewTask({ id }: Props) {
+  const router = useRouter();
   const { report, loading, refetch } = useReport(id);
-  const { assign } = useAssignment();
 
   if (loading) {
     return (
@@ -46,24 +47,29 @@ export default function PreviewReport({ id }: Props) {
   }
 
   return (
-    <div className="space-y-6">
-      <AssignmentReport
-      assignedTo={report.assigned_to}
-        onAssign={async (worker) => {
-          await assign(
-            report.id,
-            worker.id
-          )
-          await refetch()
-        }}
-      />
-
-
-      {/* Grid de 2 columnas: Info + Evidence */}
-      <div className="grid lg:grid-cols-2 gap-6">
-        <ReportInfo report={report} />
-        <ReportMap latitude={report.latitude} longitude={report.longitude} />
+    <div className="space-y-6 ">
+      {/* Header con título y botón de volver */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => router.back()}
+            className="gap-2 -ml-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Volver
+          </Button>
+          <div className="flex items-center gap-2">
+            <FileText className="h-5 w-5 text-primary" />
+            <h1 className="text-2xl font-semibold tracking-tight">
+              Reporte #{report.id.slice(0, 8)}
+            </h1>
+          </div>
+        </div>
+        <SolveReport reportId={id} onSuccess={refetch} />
       </div>
+
       <ReportTimeline
         items={[
           {
@@ -89,7 +95,10 @@ export default function PreviewReport({ id }: Props) {
         ]}
       />
 
-
+      <div className="grid lg:grid-cols-2 gap-6">
+        <ReportInfo report={report} />
+        <ReportMap latitude={report.latitude} longitude={report.longitude} />
+      </div>
     </div>
   );
 }

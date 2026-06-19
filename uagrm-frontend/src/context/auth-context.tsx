@@ -135,7 +135,7 @@ export const AuthProvider = ({
       console.log(e);
     }
 
-    router.push("/dashboard");
+    router.push("/reports");
     router.refresh();
 
     return { success: true };

@@ -102,14 +102,7 @@ export const ProfileDropdown = () => {
             </div>
           </div>
           <div className="p-2">
-            <DropdownMenuItem className="flex items-center gap-3 p-2 cursor-pointer hover:bg-accent rounded-md">
-              <MdPermIdentity className="text-lg text-muted-foreground" />
-              <span className="text-sm text-foreground">My profile</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="flex items-center gap-3 p-2 cursor-pointer hover:bg-accent rounded-md">
-              <IoSettingsOutline className="text-lg text-muted-foreground" />
-              <span className="text-sm text-foreground">Settings</span>
-            </DropdownMenuItem>
+ 
             <Button
               variant="default"
               className="w-full h-9 mt-2 cursor-pointer hover:bg-red-600"

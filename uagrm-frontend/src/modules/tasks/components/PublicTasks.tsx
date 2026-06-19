@@ -2,55 +2,47 @@
 
 import { useMemo, useState } from "react";
 
-import ListReport from "@/modules/report/components/ListReport";
-import ReportFilters from "@/modules/report/components/ReportFilter";
-
 import { useReports } from "@/modules/report/hooks/useReports.hook";
 
-import { ReportQuery } from "@/modules/report/type/report.type";
-import { getLast7Days } from "@/modules/report/utils/utils.report";
+import { AreaType, ReportStatus, } from "@/modules/report/type/report.type";
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationLink, PaginationEllipsis, PaginationNext } from "@/components/ui/pagination";
+import { useAuth } from "@/hooks/useAuth";
+import ListTasks from "./PublicTable";
 
-const ReportPage = () => {
-    const [query, setQuery] = useState<ReportQuery>({
-        ...getLast7Days(),
-    });
+const PublicTasks = () => {
+
+    const { profile } = useAuth()
 
     const [page, setPage] = useState(1);
-    
-    const status = useMemo(() => {
-  return query.status ? [query.status] : undefined;
-}, [query.status]);
-    
+
+    const status = useMemo(
+        () => [
+            ReportStatus.PENDING,
+        ],
+        []
+    );
 
     const {
         reports,
         meta,
         loading,
     } = useReports({
-        ...query,
         page,
         pageSize: 10,
-        status: status
+        area: profile?.role as AreaType,
+        status: status,
+        unassignedOnly: true
+
     });
 
     const totalPages = meta?.totalPages ?? 0;
 
     const showPagination = totalPages > 1;
 
-
     return (
         <div className="space-y-6">
 
-            <ReportFilters
-                value={query}
-                onChange={(newQuery) => {
-                    setPage(1); // reset al filtrar
-                    setQuery(newQuery);
-                }}
-            />
-
-            <ListReport
+            <ListTasks
                 reports={reports}
                 loading={loading}
             />
@@ -103,4 +95,4 @@ const ReportPage = () => {
     );
 };
 
-export default ReportPage;
+export default PublicTasks;

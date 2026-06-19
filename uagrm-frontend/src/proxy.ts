@@ -12,7 +12,7 @@ export async function proxy(req: NextRequest) {
   } = await supabase.auth.getSession();
 
   const path = req.nextUrl.pathname;
-  const protectedPaths = ["/dashboard", "/settings", "/wallets", "/payments", "/organization/members", "developers", "reset-password"];
+  const protectedPaths = ["/dashboard","/tasks","/reports","/users"];
   const authPaths = ["/login", "/register", "/forgot-password"];
 
   const isProtected = protectedPaths.some((p) => path.startsWith(p));
@@ -35,15 +35,11 @@ export async function proxy(req: NextRequest) {
 export const config = {
   matcher: [
     "/dashboard/:path*",
-    "/settings/:path*",
-    "/wallets/:path*",
-    "/payments/:path*",
-    "/organization/:path*",
-    "/developers/:path*",
-    "/reset-password/:path",
+    "/tasks/:path*",
+    "/reports/:path*",
+    "/users/:path*",
 
     "/login",
     "/register",
-    "/forgot-password",
   ],
 };

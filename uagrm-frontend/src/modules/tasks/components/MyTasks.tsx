@@ -7,50 +7,46 @@ import ReportFilters from "@/modules/report/components/ReportFilter";
 
 import { useReports } from "@/modules/report/hooks/useReports.hook";
 
-import { ReportQuery } from "@/modules/report/type/report.type";
+import { AreaType, ReportQuery, ReportStatus } from "@/modules/report/type/report.type";
 import { getLast7Days } from "@/modules/report/utils/utils.report";
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationLink, PaginationEllipsis, PaginationNext } from "@/components/ui/pagination";
+import { useAuth } from "@/hooks/useAuth";
+import ListTasks from "./PublicTable";
+import PrivateTasks from "./privateTable";
 
-const ReportPage = () => {
-    const [query, setQuery] = useState<ReportQuery>({
-        ...getLast7Days(),
-    });
+const MyTasks = () => {
+
+    const {profile} = useAuth()
 
     const [page, setPage] = useState(1);
-    
-    const status = useMemo(() => {
-  return query.status ? [query.status] : undefined;
-}, [query.status]);
-    
+        const status = useMemo(
+      () => [
+        ReportStatus.PENDING,
+        ReportStatus.IN_PROGRESS,
+      ],
+      []
+    );
 
     const {
         reports,
         meta,
         loading,
     } = useReports({
-        ...query,
         page,
         pageSize: 10,
-        status: status
-    });
+        assignedToId:profile?.id,
+        status:status
 
+    });
+    
     const totalPages = meta?.totalPages ?? 0;
 
     const showPagination = totalPages > 1;
 
-
     return (
         <div className="space-y-6">
 
-            <ReportFilters
-                value={query}
-                onChange={(newQuery) => {
-                    setPage(1); // reset al filtrar
-                    setQuery(newQuery);
-                }}
-            />
-
-            <ListReport
+            <PrivateTasks
                 reports={reports}
                 loading={loading}
             />
@@ -103,4 +99,4 @@ const ReportPage = () => {
     );
 };
 
-export default ReportPage;
+export default MyTasks;

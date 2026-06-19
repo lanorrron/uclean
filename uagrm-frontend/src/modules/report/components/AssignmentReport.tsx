@@ -44,7 +44,7 @@ export default function AssignmentReport({
           {isAssigned && assignedTo ? (
             <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center border-2 border-primary/20">
               <span className="text-primary font-bold text-sm">
-                {getInitials(assignedTo.first_name+ ' ' + assignedTo.last_name)}
+                {getInitials(assignedTo.first_name + ' ' + assignedTo.last_name)}
               </span>
             </div>
           ) : (
@@ -63,7 +63,7 @@ export default function AssignmentReport({
             {isAssigned && assignedTo ? (
               <div className="mt-0.5">
                 <p className="font-medium text-foreground text-sm">
-                  {assignedTo.last_name + ' ' + assignedTo.last_name}
+                  {(assignedTo.first_name ?? '') + ' ' + (assignedTo.last_name ?? '')}
                 </p>
 
                 <div className="flex flex-wrap items-center gap-2 mt-1">

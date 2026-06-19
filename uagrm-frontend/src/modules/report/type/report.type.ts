@@ -17,7 +17,10 @@ export type Report = {
 
   description?: string | null;
 
-  image_url?: string | null;
+  report_image_url: string
+  resolved_image_url?: string
+
+  resolved_at: Date
 
   latitude: number;
   longitude: number;
@@ -54,11 +57,17 @@ export interface GetReportsParams {
 
   pageSize?: number;
 
-  status?: string;
+  status?: ReportStatus[];
 
   from?: string;
 
   to?: string;
+
+  area?: AreaType;
+
+  assignedToId?: string;
+
+  unassignedOnly?: boolean;
 }
 export interface ReportQuery {
   status?: ReportStatus;

@@ -18,8 +18,7 @@ const Drawer: React.FC<DrawerProps> = ({
   const translateClass =
     position === "left" ? "-translate-x-full" : "translate-x-full";
 
-  const openClass =
-    position === "left" ? "translate-x-0" : "-translate-x-0";
+const openClass = "translate-x-0";
 
   return (
     <div

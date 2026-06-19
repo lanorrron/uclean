@@ -40,7 +40,7 @@
     "npm": "^11.6.4",
     "porto": "^0.2.37",
     "qrcode-with-logos": "^1.1.1",
-    "radix-ui": "^1.5.0",
+    "radix-ui": "^1.6.0",
     "react": "^19.2.0",
     "react-day-picker": "^9.13.0",
     "react-dom": "19.2.0",

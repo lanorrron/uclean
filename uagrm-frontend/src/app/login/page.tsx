@@ -164,26 +164,6 @@ const Login = () => {
                 )}
               </div>
 
-              {/* Opciones remember y forgot */}
-              <div className="flex items-center justify-between">
-                <label className="flex items-center gap-2 cursor-pointer group">
-                  <Checkbox
-                    checked={rememberMe}
-                    onCheckedChange={(checked: any) => setValue("rememberMe", checked as boolean)}
-                    className="border-border data-[state=checked]:bg-primary data-[state=checked]:border-primary h-4 w-4"
-                  />
-                  <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
-                    Recordarme
-                  </span>
-                </label>
-                <a 
-                  href="/forgot-password" 
-                  className="text-xs text-primary hover:text-primary/80 transition-colors font-medium"
-                >
-                  ¿Olvidaste tu contraseña?
-                </a>
-              </div>
-
               {/* Turnstile */}
               <div className="flex justify-center py-2">
                 <Turnstile

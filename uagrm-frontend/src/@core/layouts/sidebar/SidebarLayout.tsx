@@ -11,6 +11,7 @@ interface Props {
   routes: MenuNavigationTypes
 }
 export const Sidebar = ({ routes }: Props) => {
+  
   const { settings } = useContext(SettingsContext);
   if (settings.navHidden) return null
 

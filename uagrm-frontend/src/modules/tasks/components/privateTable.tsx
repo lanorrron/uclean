@@ -5,19 +5,43 @@ import { Chip } from "@/components/ui/chip";
 import { MapPin, Calendar, AlertCircle } from "lucide-react";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
-import { formatReportDate, formatStatusLabel, getIncidentType, getStatusChipVariant, getUserType } from "../utils/utils.report";
-import { Report } from "../type/report.type";
+import { formatReportDate, formatStatusLabel, getIncidentType, getStatusChipVariant, getUserType } from "@/modules/report/utils/utils.report";
+
+import { Report, ReportStatus } from "../../report/type/report.type";
+
+import { useRouter } from "next/navigation";
+import { useAssignment } from "@/modules/report/hooks/useAssignment.hook";
+import { useAuth } from "@/hooks/useAuth";
+import { useAssignAndStart } from "@/modules/report/hooks/useAssignAndStart";
+
+
 interface ListReportProps {
-reports:Report[];
-loading?:boolean;
+    reports: Report[];
+    loading?: boolean;
 }
 
-export default function ListReport({ reports, loading }: ListReportProps) {
+export default function PrivateTasks({ reports, loading }: ListReportProps) {
     const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
-    
-     const handleImageError = (reportId: string) => {
+    const router = useRouter()
+    const {profile}= useAuth();
+       const { assignAndStart } = useAssignAndStart()
+
+
+
+    const handleImageError = (reportId: string) => {
         setImageErrors(prev => ({ ...prev, [reportId]: true }));
     };
+    const handleAssing = async (report: Report) => {
+        if (!profile?.id) return;
+
+        if (report.status === ReportStatus.PENDING) {
+
+             await assignAndStart(report.id);
+        }
+
+        router.push(`/tasks/${report.id}`);
+    }
+
 
     if (loading) {
         return (
@@ -117,8 +141,8 @@ export default function ListReport({ reports, loading }: ListReportProps) {
                                             </span>
                                         </div>
 
-                                        <a href={`/reports/${report.id}`} className="text-primary font-semibold text-xs flex items-center gap-1 hover:gap-2 transition-all duration-200 group/btn cursor-pointer">
-                                            Ver Detalles
+                                        <a onClick={() => handleAssing(report)} className="text-primary font-semibold text-xs flex items-center gap-1 hover:gap-2 transition-all duration-200 group/btn cursor-pointer">
+                                            Iniciar trabajo
                                             <MdOutlineKeyboardArrowRight className="text-base group-hover/btn:translate-x-0.5 transition-transform" />
                                         </a>
                                     </div>
