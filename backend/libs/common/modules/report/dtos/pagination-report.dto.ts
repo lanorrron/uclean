@@ -9,7 +9,6 @@ import {
     IsString,
     Min,
 } from "class-validator";
-
 import { Area, ReportStatus } from "@prisma/client";
 
 export class PaginationReportDto {

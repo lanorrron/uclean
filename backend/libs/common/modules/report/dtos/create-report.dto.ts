@@ -19,8 +19,9 @@ export class CreateReportDto {
   @IsEnum(UserType)
   userType: UserType;
 
+    @IsOptional()
   @IsString()
-  registerNumber: string;
+  registerNumber?: string;
 
   @IsEnum(IncidentType)
   incidentType: IncidentType;
@@ -28,9 +29,8 @@ export class CreateReportDto {
   @IsEnum(Area)
   area:Area;
 
-  @IsOptional()
   @IsString()
-  description?: string;
+  description: string;
 
   @Type(() => Number)
   @IsLatitude()
