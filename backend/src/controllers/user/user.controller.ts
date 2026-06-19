@@ -20,7 +20,7 @@ export class UserController {
 
     @Get()
     async allUserPlusInvitations(@Req() req: any) {
-        const users = await this.userService.findMany(req.user.role);
+        const users = await this.userService.findMany();
         const invitations = await this.invitationService.listinvitations();
         return HttpResponse.Success({ users, invitations });
     }

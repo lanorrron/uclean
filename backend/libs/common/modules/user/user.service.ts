@@ -40,7 +40,7 @@ export class UserService {
     return this.repo.create(user)
   }
 
-  async findMany(role: Role) {
+  async findMany(role?: Role) {
     return this.repo.findMany(role)
   }
 

@@ -39,11 +39,14 @@ model Report {
 
   description String?
 
-  image_url String?
+  report_image_url   String?
+  resolved_image_url String?
+
+  resolved_at DateTime?
 
   latitude  Float
   longitude Float
-  area      Area 
+  area      Area
 
   status ReportStatus @default(PENDING)
 

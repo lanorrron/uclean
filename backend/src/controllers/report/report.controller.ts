@@ -1,4 +1,5 @@
 import {
+    BadRequestException,
     Body,
     Controller,
     Get,
@@ -18,6 +19,8 @@ import { Public } from "@app/auth/decorators/auth.decorator";
 import { PaginationReportDto } from "libs/common/modules/report/dtos/pagination-report.dto";
 import { HttpResponse } from "@app/common/errors/httpResponse";
 import { Throttle } from "@nestjs/throttler";
+import { ReportStatus } from "@prisma/client";
+import sharp from "sharp";
 
 @Controller("reports")
 export class ReportController {
@@ -28,13 +31,53 @@ export class ReportController {
     @Public()
     @Post()
     @Throttle({ short: { limit: 1, ttl: 1000 } })
-    @UseInterceptors(FileInterceptor("image"))
+    @UseInterceptors(
+        FileInterceptor("image", {
+            limits: {
+                fileSize: 5 * 1024 * 1024, // 5MB
+            },
+            fileFilter: (req, file, cb) => {
+                const allowed = ["image/jpeg", "image/png", "image/webp"];
+
+                if (!allowed.includes(file.mimetype)) {
+                    return cb(new BadRequestException("Solo imágenes válidas"), false);
+                }
+
+                cb(null, true);
+            },
+        }),
+    )
     async create(
         @Body() dto: CreateReportDto,
         @UploadedFile() file?: Express.Multer.File,
     ) {
-        const result = this.reportService.create(dto, file);
-          return HttpResponse.Success(result);
+        let processedFile: Express.Multer.File | undefined;
+
+        if (file) {
+
+            try {
+                const buffer = await sharp(file.buffer)
+                    .rotate()
+                    .resize({
+                        width: 1280,
+                        withoutEnlargement: true,
+                    })
+                    .jpeg({ quality: 80 })
+                    .toBuffer();
+
+                processedFile = {
+                    ...file,
+                    buffer,
+                    mimetype: "image/jpeg",
+                };
+            } catch (err) {
+                throw new BadRequestException("Archivo de imagen inválido");
+            }
+        }
+
+        const result = await this.reportService.create(dto, processedFile);
+
+        return HttpResponse.Success(result);
     }
 
     @Get(":id")
@@ -42,7 +85,6 @@ export class ReportController {
         @Param("id") id: string,
     ) {
         const result = await this.reportService.findById(id);
-        console.log(result);
         return HttpResponse.Success(result);
     }
 
@@ -60,5 +102,45 @@ export class ReportController {
     ) {
         const result = await this.reportService.assign(id, userId);
         return HttpResponse.Success(result);
-}
+    }
+
+    @Put(":id/assign-and-start")
+    async assignAndStart(
+        @Param("id") id: string,
+        @Req() req: any
+    ) {
+        const result = await this.reportService.assignAndStart(
+            id,
+            req.user.userId
+        );
+
+        return HttpResponse.Success(result);
+    }
+
+    @Put(":id/resolve")
+    @UseInterceptors(
+        FileInterceptor("image", {
+            limits: {
+                fileSize: 5 * 1024 * 1024, // 5MB
+            },
+            fileFilter: (req, file, cb) => {
+                const allowed = ["image/jpeg", "image/png", "image/webp"];
+
+                if (!allowed.includes(file.mimetype)) {
+                    return cb(new BadRequestException("Solo imágenes válidas"), false);
+                }
+
+                cb(null, true);
+            },
+        }),
+    )
+    async resolveReport(
+        @Param("id") reportId: string,
+        @UploadedFile() file?: Express.Multer.File,
+    ) {
+        const result = await this.reportService.resolveReport(reportId, file);
+
+        return HttpResponse.Success(result);
+    }
+
 }

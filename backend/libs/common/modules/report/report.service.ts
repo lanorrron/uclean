@@ -4,7 +4,7 @@ import { SupabaseStorageService } from "./supabase/supabase-storage.service";
 import { CreateReportDto } from "./dtos/create-report.dto";
 import { PaginationReportDto } from "./dtos/pagination-report.dto";
 import { PagedData } from "@app/common/model/response.model";
-import { Report } from "@prisma/client";
+import { Report, ReportStatus } from "@prisma/client";
 import { ReportNotFound } from "./errors/report.error";
 
 
@@ -31,6 +31,15 @@ export class ReportService {
         );
     }
 
+    async resolveReport(reportId:string,    file: Express.Multer.File){
+            let imageUrl: string | undefined;
+
+        if (file) {
+            imageUrl = await this.storageService.uploadImage(file);
+        }
+        return this.reportRepository.resolveReport(reportId,imageUrl);
+    }
+
 
     async findById(id: string) {
         const report = await this.reportRepository.findById(id);
@@ -46,13 +55,16 @@ export class ReportService {
     }
 
     async reports(data: PaginationReportDto): Promise<PagedData<Report>> {
-        const { page, pageSize, from, status, to ,area} = data;
-        const { items, totalItems } = await this.reportRepository.reports({ page, pageSize, from, status, to,area });
-        const totalPages = Math.ceil(totalItems / pageSize);
+        const { items, totalItems } = await this.reportRepository.reports(data);
+        const totalPages = Math.ceil(totalItems / data.pageSize);
         return {
             items,
-            meta: { pageSize, currentPage: page, totalPages, totalItems },
+            meta: { pageSize:data.pageSize, currentPage: data.page, totalPages, totalItems },
         };
     }
 
+    async assignAndStart(reportId:string,userId:string){
+        await this.findById(reportId);
+        return this.reportRepository.assignAndStart(reportId,userId);
+    }
 }

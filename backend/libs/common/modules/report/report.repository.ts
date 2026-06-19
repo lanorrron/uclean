@@ -21,8 +21,8 @@ export class ReportRepository {
                 description: dto.description,
                 latitude: dto.latitude,
                 longitude: dto.longitude,
-                image_url: imageUrl,
-                area:dto.area,
+                report_image_url: imageUrl,
+                area: dto.area,
             },
         });
     }
@@ -31,7 +31,7 @@ export class ReportRepository {
     async findById(id: string) {
         return this.db.report.findUnique({
             where: { id },
-            include: { assigned_to: true },
+            include: { assigned_to: true, },
         });
     }
 
@@ -42,6 +42,15 @@ export class ReportRepository {
                 status,
             },
         });
+    }
+    async assignAndStart(reportId: string, userId: string) {
+        return this.db.report.update({
+            where: { id: reportId },
+            data: {
+                assigned_to_id: userId,
+                status: ReportStatus.IN_PROGRESS
+            }
+        })
     }
 
     async assign(reportId: string, userId: string) {
@@ -55,8 +64,18 @@ export class ReportRepository {
         });
     }
 
+    async resolveReport(reportId: string, resolvedImageUrl: string) {
+        return this.db.report.update({
+            where: {
+                id: reportId
+            },
+            data: { resolved_image_url: resolvedImageUrl, resolved_at: new Date(), status:ReportStatus.RESOLVED }
+        })
+
+    }
+
     async reports(query: PaginationReportDto): Promise<{ items: Report[]; totalItems: number }> {
-        const {page,pageSize, from, status, to, area}= query
+        const { page, pageSize, from, status, to, area, assignedToId, unassignedOnly } = query
 
         const skip = (page - 1) * pageSize;
 
@@ -64,9 +83,11 @@ export class ReportRepository {
             AND: [],
         };
 
-       if (status) {
+        if (status?.length) {
             where.AND.push({
-                status: status,
+                status: {
+                    in: status,
+                },
             });
         }
 
@@ -86,16 +107,29 @@ export class ReportRepository {
             });
         }
 
-            if (area){
-                where.AND.push({
+        if (area) {
+            where.AND.push({
 
-                    area: area
-                })
-            }
+                area: area
+            })
+        }
+        if (assignedToId) {
+            where.AND.push({
+                assigned_to_id: assignedToId
+            })
+        }
+
+        if (unassignedOnly) {
+            where.AND.push({
+                assigned_to_id: null
+            })
+        }
 
         if (where.AND.length === 0) {
             delete where.AND;
         }
+
+
 
         const [items, totalItems] = await Promise.all([
             this.db.report.findMany({
@@ -117,5 +151,7 @@ export class ReportRepository {
             totalItems,
         };
     }
+
+
 
 }

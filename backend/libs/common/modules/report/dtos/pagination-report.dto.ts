@@ -1,9 +1,12 @@
-import { Type } from "class-transformer";
+import { Transform, Type } from "class-transformer";
 import {
+    IsArray,
+    IsBoolean,
     IsDate,
     IsEnum,
     IsInt,
     IsOptional,
+    IsString,
     Min,
 } from "class-validator";
 
@@ -24,8 +27,12 @@ export class PaginationReportDto {
     pageSize: number = 10;
 
     @IsOptional()
-    @IsEnum(ReportStatus)
-    status?: ReportStatus;
+    @Transform(({ value }) =>
+        Array.isArray(value) ? value : [value]
+    )
+    @IsArray()
+    @IsEnum(ReportStatus, { each: true })
+    status?: ReportStatus[];
 
     @IsOptional()
     @Type(() => Date)
@@ -40,6 +47,16 @@ export class PaginationReportDto {
     @IsOptional()
     @IsEnum(Area)
     area?: Area;
+
+    @IsOptional()
+    @IsString()
+    assignedToId?: string;
+    @IsOptional()
+
+    @IsOptional()
+    @Transform(({ value }) => value === "true")
+    @IsBoolean()
+    unassignedOnly?: boolean;
 
 
 }
