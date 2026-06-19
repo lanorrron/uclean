@@ -15,7 +15,8 @@ export default function ReportForm() {
     registerNumber: '',
     incidentType: '',
     photo: '',
-    location: ''
+    location: '',
+    description: ""
   })
 
   // Hooks
@@ -57,7 +58,8 @@ export default function ReportForm() {
       registerNumber: '',
       incidentType: '',
       photo: '',
-      location: ''
+      location: '',
+      description: ''
     }
 
     // Validar Vínculo Universitario
@@ -67,15 +69,14 @@ export default function ReportForm() {
     }
 
     // Validar Nro. Registro (solo números)
-    if (!formData.registerNumber) {
-      newErrors.registerNumber = 'Ingresa tu número de registro'
-      isValid = false
-    } else if (!/^\d+$/.test(formData.registerNumber)) {
-      newErrors.registerNumber = 'El número de registro debe contener solo dígitos'
-      isValid = false
-    } else if (formData.registerNumber.length < 6) {
-      newErrors.registerNumber = 'El número de registro debe tener al menos 6 dígitos'
-      isValid = false
+    if (formData.registerNumber) {
+      if (!/^\d+$/.test(formData.registerNumber)) {
+        newErrors.registerNumber = 'El número de registro debe contener solo dígitos'
+        isValid = false
+      } else if (formData.registerNumber.length < 6) {
+        newErrors.registerNumber = 'El número de registro debe tener al menos 6 dígitos'
+        isValid = false
+      }
     }
 
     // Validar Tipo de Incidente
@@ -93,6 +94,16 @@ export default function ReportForm() {
     // Validar Ubicación
     if (!location.lat || !location.lon) {
       newErrors.location = 'Debes permitir el acceso a tu ubicación'
+      isValid = false
+    }
+    if (!formData.description?.trim()) {
+      newErrors.description = 'Ingresa una descripción'
+      isValid = false
+    } else if (formData.description.trim().length < 10) {
+      newErrors.description = 'La descripción debe tener al menos 10 caracteres'
+      isValid = false
+    } else if (formData.description.trim().length > 200) {
+      newErrors.description = 'La descripción no puede superar los 200 caracteres'
       isValid = false
     }
 
@@ -115,7 +126,6 @@ export default function ReportForm() {
       await startFlow((coords) => {
         setLocationCoords(coords.lat, coords.lon)
         clearFieldError('location')
-        toast.success('📍 Ubicación registrada correctamente')
       })
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Error al obtener permisos'
@@ -130,7 +140,6 @@ export default function ReportForm() {
       const file = await capturePhoto()
       if (file) {
         clearFieldError('photo')
-        toast.success('📸 Foto capturada correctamente')
       }
     } catch (err) {
       setFieldErrors(prev => ({ ...prev, photo: 'Error al capturar la foto' }))
@@ -141,16 +150,16 @@ export default function ReportForm() {
   // Manejar envío del formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     // Validar todos los campos
     if (!validateAllFields()) {
       toast.error('Completa todos los campos requeridos')
       return
     }
-    
+
     // Enviar reporte
     const result = await submitReport(photo)
-    
+
     if (result.success) {
       toast.success('✅ ¡Reporte enviado exitosamente! El personal de limpieza lo atenderá')
       resetCamera()
@@ -160,7 +169,8 @@ export default function ReportForm() {
         registerNumber: '',
         incidentType: '',
         photo: '',
-        location: ''
+        location: '',
+        description: ""
       })
     } else if (result.error) {
       toast.error(result.error)
@@ -201,11 +211,10 @@ export default function ReportForm() {
                   🎓 Vínculo Universitario <span className="text-red-500">*</span>
                 </label>
                 <select
-                  className={`w-full rounded-xl px-4 py-3 text-sm transition-all focus:ring-2 focus:ring-primary/20 ${
-                    fieldErrors.userType
-                      ? 'border-2 border-red-500 bg-red-50'
-                      : 'border border-gray-200 bg-white focus:border-primary'
-                  }`}
+                  className={`w-full rounded-xl px-4 py-3 text-sm transition-all focus:ring-2 focus:ring-primary/20 ${fieldErrors.userType
+                    ? 'border-2 border-red-500 bg-red-50'
+                    : 'border border-gray-200 bg-white focus:border-primary'
+                    }`}
                   value={formData.userType}
                   onChange={(e) => {
                     updateFormData('userType', e.target.value)
@@ -229,17 +238,16 @@ export default function ReportForm() {
               {/* Nro. Registro - Solo números */}
               <div>
                 <label className="text-xs font-bold text-primary uppercase tracking-wide block mb-2">
-                  🆔 Nro. Registro <span className="text-red-500">*</span>
+                  🆔 Nro. Registro (Opcional)
                 </label>
                 <input
                   type="text"
                   inputMode="numeric"
                   pattern="[0-9]*"
-                  className={`w-full rounded-xl px-4 py-3 text-sm transition-all focus:ring-2 focus:ring-primary/20 ${
-                    fieldErrors.registerNumber
-                      ? 'border-2 border-red-500 bg-red-50'
-                      : 'border border-gray-200 bg-white focus:border-primary'
-                  }`}
+                  className={`w-full rounded-xl px-4 py-3 text-sm transition-all focus:ring-2 focus:ring-primary/20 ${fieldErrors.registerNumber
+                    ? 'border-2 border-red-500 bg-red-50'
+                    : 'border border-gray-200 bg-white focus:border-primary'
+                    }`}
                   placeholder="Ej. 219000000"
                   value={formData.registerNumber}
                   onChange={(e) => handleRegisterNumberChange(e.target.value)}
@@ -258,11 +266,10 @@ export default function ReportForm() {
                 ⚠️ Tipología del Incidente <span className="text-red-500">*</span>
               </label>
               <select
-                className={`w-full rounded-xl px-4 py-3 text-sm transition-all focus:ring-2 focus:ring-primary/20 ${
-                  fieldErrors.incidentType
-                    ? 'border-2 border-red-500 bg-red-50'
-                    : 'border border-gray-200 bg-white focus:border-primary'
-                }`}
+                className={`w-full rounded-xl px-4 py-3 text-sm transition-all focus:ring-2 focus:ring-primary/20 ${fieldErrors.incidentType
+                  ? 'border-2 border-red-500 bg-red-50'
+                  : 'border border-gray-200 bg-white focus:border-primary'
+                  }`}
                 value={formData.incidentType}
                 onChange={(e) => {
                   updateFormData('incidentType', e.target.value)
@@ -288,7 +295,7 @@ export default function ReportForm() {
               <label className="text-xs font-bold text-primary uppercase tracking-wide block mb-2">
                 📸 Captura de Evidencia <span className="text-red-500">*</span>
               </label>
-              
+
               <div className="bg-blue-50 rounded-xl p-3 mb-4 flex items-start gap-2">
                 <span className="text-blue-500 text-sm">📍</span>
                 <p className="text-xs text-blue-700">
@@ -297,11 +304,10 @@ export default function ReportForm() {
               </div>
 
               <div
-                className={`relative aspect-video rounded-xl overflow-hidden cursor-pointer transition-all ${
-                  fieldErrors.photo || fieldErrors.location
-                    ? 'border-2 border-red-500 ring-2 ring-red-200'
-                    : 'border-2 border-dashed border-gray-300 hover:border-primary'
-                } ${photoPreview ? '' : 'bg-gray-100'}`}
+                className={`relative aspect-video rounded-xl overflow-hidden cursor-pointer transition-all ${fieldErrors.photo || fieldErrors.location
+                  ? 'border-2 border-red-500 ring-2 ring-red-200'
+                  : 'border-2 border-dashed border-gray-300 hover:border-primary'
+                  } ${photoPreview ? '' : 'bg-gray-100'}`}
                 onClick={handleStartFlow}
               >
                 {photoPreview ? (
@@ -326,7 +332,7 @@ export default function ReportForm() {
                   <span>⚠️</span> {fieldErrors.photo}
                 </p>
               )}
-              
+
               {/* Error de ubicación */}
               {fieldErrors.location && (
                 <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
@@ -340,23 +346,35 @@ export default function ReportForm() {
             {/* Observaciones */}
             <div>
               <label className="text-xs font-bold text-primary uppercase tracking-wide block mb-2">
-                📝 Observaciones (Opcional)
+                📝 Comentario <span className="text-red-500">*</span>
               </label>
+
               <textarea
-                className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all min-h-[100px] resize-none"
-                placeholder="Describe brevemente la situación..."
+                className={`w-full rounded-xl px-4 py-3 text-sm transition-all focus:ring-2 focus:ring-primary/20 ${fieldErrors.description
+                    ? 'border-2 border-red-500 bg-red-50'
+                    : 'border border-gray-200 bg-white focus:border-primary'
+                  }`}
+                placeholder="Describe el incidente..."
                 value={formData.description}
-                onChange={(e) => updateFormData('description', e.target.value)}
+                onChange={(e) => {
+                  updateFormData('description', e.target.value)
+                  clearFieldError('description')
+                }}
               />
+
+              {fieldErrors.description && (
+                <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                  <span>⚠️</span> {fieldErrors.description}
+                </p>
+              )}
             </div>
 
             {/* Botón enviar */}
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`w-full bg-primary text-white rounded-xl py-4 font-bold transition-all flex items-center justify-center gap-2  cursor-pointer ${
-                isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-dark'
-              }`}
+              className={`w-full bg-primary text-white rounded-xl py-4 font-bold transition-all flex items-center justify-center gap-2  cursor-pointer ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-dark'
+                }`}
             >
               {isSubmitting ? (
                 <>
