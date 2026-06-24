@@ -218,7 +218,7 @@ const Login = () => {
 
         {/* Footer adicional */}
         <p className="text-center text-xs text-muted-foreground/50 mt-6">
-          © 2024 EcoUAGRM • Universidad Gabriel René Moreno
+          © 2026 EcoUAGRM • Universidad Gabriel René Moreno
         </p>
       </div>
     </div>
