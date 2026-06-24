@@ -529,9 +529,9 @@ export default function DashboardPage() {
                           </div>
                         </div>
                       </div>
-                      <Button variant="ghost" size="sm" className="flex-shrink-0">
+                      <Link href={`/reports/${report.id}`} className="flex-shrink-0 hover:text-primary">
                         Ver
-                      </Button>
+                      </Link>
                     </div>
                   );
                 })}
