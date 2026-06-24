@@ -16,8 +16,9 @@ export enum UserType {
 
 export enum Role {
   ADMIN = "ADMIN",
-  MANTENIMINETO = "MANTENIMIENTO",
-  LIMPIEZA = "LIMPIEZA",
+  MANTENIMINETO = "MAINTENANCE",
+  LIMPIEZA = "CLEANING",
+  SEGURIDAD = "SECURITY"
 }
 export interface UserPlusInvitations {
   users: User[];

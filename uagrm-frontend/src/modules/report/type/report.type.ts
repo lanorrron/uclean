@@ -36,8 +36,9 @@ export type Report = {
 };
 
 export enum AreaType {
-  LIMPIEZA = "LIMPIEZA",
-  MANTENIMIENTO = "MANTENIMIENTO",
+  LIMPIEZA = "CLEANING",
+  MANTENIMIENTO = "MAINTENANCE",
+    SEGURIDAD = "SECURITY",
   OTROS = "OTROS",
 }
 
@@ -47,6 +48,7 @@ export enum IncidentType {
   BATHROOM = "BATHROOM",
   LIGHTING = "LIGHTING",
   FURNITURE = "FURNITURE",
+  SECURITY = "SECURITY"
 }
 
 export type DatePreset = "today" | "7d" | "month" | "custom";
@@ -77,3 +79,16 @@ export interface ReportQuery {
 
 
 }
+
+export type MetricsReportResponse = {
+  totalReports: number;
+  totalUsers: number;
+  pendingReports: number;
+  resolvedReports: number;
+  resolutionRate: number;
+  recentReports: Report[];
+  incidentsByArea: {
+    area: string;
+    total: number;
+  }[];
+};

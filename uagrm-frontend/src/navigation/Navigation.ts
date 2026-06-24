@@ -15,12 +15,12 @@ export const Navigation = (): MenuNavigationTypes => {
     {
       title: "Dashboards",
       icon: LayoutDashboard,
-      roles: [Role.ADMIN, Role.LIMPIEZA, Role.MANTENIMINETO],
+      roles: [Role.ADMIN, Role.LIMPIEZA, Role.MANTENIMINETO, Role.SEGURIDAD],
       subMenuItems: [
         {
           title: "Vista rápida",
           path: "/dashboard",
-          roles: [Role.ADMIN, Role.LIMPIEZA, Role.MANTENIMINETO],
+          roles: [Role.ADMIN, Role.LIMPIEZA, Role.MANTENIMINETO,Role.SEGURIDAD],
         },
       ]
     },
@@ -29,20 +29,20 @@ export const Navigation = (): MenuNavigationTypes => {
       title: "Mis Tareas",
       path: "/tasks",
       icon: User,
-      roles: [ Role.LIMPIEZA, Role.MANTENIMINETO],
+      roles: [ Role.LIMPIEZA, Role.MANTENIMINETO,Role.SEGURIDAD],
     },
 
     {
       title: "Reportes",
       path: "/reports",
       icon: NotebookPen,
-      roles: [Role.ADMIN, Role.LIMPIEZA, Role.MANTENIMINETO],
+      roles: [Role.ADMIN, Role.LIMPIEZA, Role.MANTENIMINETO,Role.SEGURIDAD],
     },
     {
       title: "Usuarios",
       path: "/users",
       icon: User,
-      roles: [Role.ADMIN, Role.LIMPIEZA, Role.MANTENIMINETO],
+      roles: [Role.ADMIN, Role.LIMPIEZA, Role.MANTENIMINETO,Role.SEGURIDAD],
     },
 
 

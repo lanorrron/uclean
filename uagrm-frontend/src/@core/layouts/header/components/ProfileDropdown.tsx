@@ -62,7 +62,7 @@ const UserAvatar = ({
 };
 
 export const ProfileDropdown = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, profile } = useAuth();
 
 
   const fullName = user?.user_metadata?.firstName + " " + user?.user_metadata?.lastName
@@ -98,6 +98,9 @@ export const ProfileDropdown = () => {
               </span>
               <span className="text-xs text-muted-foreground truncate">
                 {userEmail || "No email"}
+              </span>
+                        <span className="text-xs text-muted-foreground truncate">
+                {profile?.role || "No role"}
               </span>
             </div>
           </div>

@@ -5,7 +5,7 @@ import {
   PagedData,
 } from "@/shared/http-client/kravax-response.interface";
 
-import { AreaType, GetReportsParams, Report } from "../type/report.type";
+import { AreaType, GetReportsParams, MetricsReportResponse, Report } from "../type/report.type";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_URL;
@@ -122,11 +122,31 @@ async function resolveReport(
   return result.body.data;
 }
 
+async function metrics(from?: Date, to?: Date) {
+  const params = new URLSearchParams();
+
+  if (from) {
+    params.append("from", from.toISOString());
+  }
+
+  if (to) {
+    params.append("to", to.toISOString());
+  }
+
+  const url = `${BASE_URL}/reports/metrics?${params.toString()}`;
+
+  const result =
+    await ClientHttp.get<HttpResponse<MetricsReportResponse>>(url);
+
+  return result.body.data;
+}
+
 
 export default {
   getReports,
   getReportById,
   assignReport,
   assignAndStart,
-  resolveReport
+  resolveReport,
+  metrics
 };
