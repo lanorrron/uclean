@@ -17,6 +17,7 @@ const incidentTypes = [
   { value: IncidentType.BATHROOM, label: '🚽 Baños / Sanitarios' },
   { value: IncidentType.LIGHTING, label: '💡 Iluminación' },
   { value: IncidentType.FURNITURE, label: '🪑 Mobiliario Dañado' },
+  { value: IncidentType.SECURITY, label: '🛡️ Seguridad' }
 ]
 
 export const useReportForm = () => {

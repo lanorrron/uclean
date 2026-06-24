@@ -9,8 +9,9 @@ export interface ReportData {
 }
 
 export enum AreaType {
-  LIMPIEZA = "LIMPIEZA",
-  MANTENIMIENTO = "MANTENIMIENTO",
+  CLEANING = "CLEANING",
+  MAINTENANCE = "MAINTENANCE",
+  SECURITY = "SECURITY"
 }
 
 
@@ -21,10 +22,11 @@ export interface ReportResponse {
 }
 
 export const incidentTypeToArea: Record<string, AreaType> = {
-  WASTE: AreaType.LIMPIEZA,
-  BATHROOM: AreaType.LIMPIEZA,
-  LIGHTING: AreaType.MANTENIMIENTO,
-  FURNITURE: AreaType.MANTENIMIENTO,
+  WASTE: AreaType.CLEANING,
+  BATHROOM: AreaType.CLEANING,
+  LIGHTING: AreaType.MAINTENANCE,
+  FURNITURE: AreaType.MAINTENANCE,
+  SECURITY: AreaType.SECURITY,
 };
 
 export enum IncidentType {
@@ -32,5 +34,6 @@ export enum IncidentType {
   BATHROOM = "BATHROOM",
   LIGHTING = "LIGHTING",
   FURNITURE = "FURNITURE",
+  SECURITY = "SECURITY",
   OTHER = "OTHER",
 }
