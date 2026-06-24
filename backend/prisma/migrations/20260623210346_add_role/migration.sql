@@ -1,0 +1,5 @@
+-- AlterEnum
+ALTER TYPE "Area" ADD VALUE 'SEGURIDAD';
+
+-- AlterEnum
+ALTER TYPE "Role" ADD VALUE 'SEGURIDAD';

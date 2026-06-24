@@ -31,7 +31,6 @@ export class UserInvitationController {
     @AcceptInvitationAuth()
     @Post("accept")
     async acceptInvitation(@Req() req: any) {
-        console.log("REQ USER", req.user);
         const result = await this.service.acceptInvitation(
             req.user.supabaseId,
             req.user.email

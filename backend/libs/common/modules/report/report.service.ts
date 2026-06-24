@@ -6,6 +6,7 @@ import { PaginationReportDto } from "./dtos/pagination-report.dto";
 import { PagedData } from "@app/common/model/response.model";
 import { Report, ReportStatus } from "@prisma/client";
 import { ReportNotFound } from "./errors/report.error";
+import { MetricsReportDto } from "./dtos/metrics.dto";
 
 
 @Injectable()
@@ -31,13 +32,13 @@ export class ReportService {
         );
     }
 
-    async resolveReport(reportId:string,    file: Express.Multer.File){
-            let imageUrl: string | undefined;
+    async resolveReport(reportId: string, file: Express.Multer.File) {
+        let imageUrl: string | undefined;
 
         if (file) {
             imageUrl = await this.storageService.uploadImage(file);
         }
-        return this.reportRepository.resolveReport(reportId,imageUrl);
+        return this.reportRepository.resolveReport(reportId, imageUrl);
     }
 
 
@@ -59,12 +60,15 @@ export class ReportService {
         const totalPages = Math.ceil(totalItems / data.pageSize);
         return {
             items,
-            meta: { pageSize:data.pageSize, currentPage: data.page, totalPages, totalItems },
+            meta: { pageSize: data.pageSize, currentPage: data.page, totalPages, totalItems },
         };
     }
 
-    async assignAndStart(reportId:string,userId:string){
+    async assignAndStart(reportId: string, userId: string) {
         await this.findById(reportId);
-        return this.reportRepository.assignAndStart(reportId,userId);
+        return this.reportRepository.assignAndStart(reportId, userId);
+    }
+    async metrics(query: MetricsReportDto) {
+        return this.reportRepository.metrics(query)
     }
 }

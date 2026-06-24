@@ -19,8 +19,8 @@ import { Public } from "@app/auth/decorators/auth.decorator";
 import { PaginationReportDto } from "libs/common/modules/report/dtos/pagination-report.dto";
 import { HttpResponse } from "@app/common/errors/httpResponse";
 import { Throttle } from "@nestjs/throttler";
-import { ReportStatus } from "@prisma/client";
 import sharp from "sharp";
+import { MetricsReportDto } from "libs/common/modules/report/dtos/metrics.dto";
 
 @Controller("reports")
 export class ReportController {
@@ -80,6 +80,12 @@ export class ReportController {
         return HttpResponse.Success(result);
     }
 
+    @Get('metrics')
+    async metrics(@Query() query: MetricsReportDto) {
+        const result = await this.reportService.metrics(query);
+        return HttpResponse.Success(result);
+    }
+
     @Get(":id")
     async findById(
         @Param("id") id: string,
@@ -88,7 +94,6 @@ export class ReportController {
         return HttpResponse.Success(result);
     }
 
-    @Public()
     @Get('')
     async getReports(@Req() req: Request, @Query() query: PaginationReportDto) {
         const result = await this.reportService.reports(query);
@@ -142,5 +147,6 @@ export class ReportController {
 
         return HttpResponse.Success(result);
     }
+
 
 }

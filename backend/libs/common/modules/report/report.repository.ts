@@ -1,9 +1,10 @@
 import { Injectable } from "@nestjs/common";
 
-import { Report, ReportStatus } from "@prisma/client";
+import { Area, Report, ReportStatus } from "@prisma/client";
 import { DatabaseService } from "libs/common/database/database.service";
 import { CreateReportDto } from "./dtos/create-report.dto";
 import { PaginationReportDto } from "./dtos/pagination-report.dto";
+import { MetricsReportDto } from "./dtos/metrics.dto";
 
 @Injectable()
 export class ReportRepository {
@@ -69,7 +70,7 @@ export class ReportRepository {
             where: {
                 id: reportId
             },
-            data: { resolved_image_url: resolvedImageUrl, resolved_at: new Date(), status:ReportStatus.RESOLVED }
+            data: { resolved_image_url: resolvedImageUrl, resolved_at: new Date(), status: ReportStatus.RESOLVED }
         })
 
     }
@@ -152,6 +153,89 @@ export class ReportRepository {
         };
     }
 
+    async metrics(query: MetricsReportDto) {
+        const { from, to } = query;
+
+        const dateFilter =
+            from || to
+                ? {
+                    created_at: {
+                        gte: from,
+                        lte: to,
+                    },
+                }
+                : {};
+
+        const [
+            totalReports,
+            totalUsers,
+            pendingReports,
+            resolvedReports,
+            recentReports,
+            incidentsByArea,
+        ] = await Promise.all([
+            this.db.report.count({ where: dateFilter }),
+            this.db.user.count(),
+
+            this.db.report.count({
+                where: {
+                    ...dateFilter,
+                    status: ReportStatus.PENDING,
+                },
+            }),
+
+            this.db.report.count({
+                where: {
+                    ...dateFilter,
+                    status: ReportStatus.RESOLVED,
+                },
+            }),
+
+            this.db.report.findMany({
+                where: dateFilter,
+                orderBy: { created_at: 'desc' },
+                take: 3,
+                select: {
+                    id: true,
+                    status: true,
+                    area: true,
+                    created_at: true,
+                    incident_type:true
+                },
+            }),
+
+            this.db.report.groupBy({
+                by: ['area'],
+                where: dateFilter,
+                _count: {
+                    area: true,
+                },
+                orderBy: {
+                    _count: {
+                        area: 'desc',
+                    },
+                },
+            }),
+        ]);
+
+        const resolutionRate =
+            totalReports === 0
+                ? 0
+                : (resolvedReports / totalReports) * 100;
+
+        return {
+            totalReports,
+            totalUsers,
+            pendingReports,
+            resolvedReports,
+            resolutionRate: Number(resolutionRate.toFixed(2)),
+            recentReports,
+            incidentsByArea: incidentsByArea.map((item) => ({
+                area: item.area,
+                total: item._count.area,
+            })),
+        };
+    }
 
 
 }

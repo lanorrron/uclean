@@ -8,54 +8,55 @@ datasource db {
 }
 
 model User {
-  id         String  @id @default(uuid())
-  email      String  @unique
-  first_name String?
-  last_name  String?
-
-  role Role
-
-  created_at DateTime  @default(now())
-  updated_at DateTime  @default(now()) @updatedAt
-  deleted_at DateTime?
-
+  id               String           @id @default(uuid())
+  email            String           @unique
+  role             Role
+  created_at       DateTime         @default(now())
+  updated_at       DateTime         @default(now()) @updatedAt
+  deleted_at       DateTime?
+  first_name       String?
+  last_name        String?
   assigned_reports Report[]         @relation("Report_assignee")
   invitations      UserInvitation[] @relation("Invitation_creator")
 }
 
-enum Role {
-  ADMIN
-  MANTENIMIENTO
-  LIMPIEZA
+model Report {
+  id                 String       @id @default(uuid())
+  description        String?
+  latitude           Float
+  longitude          Float
+  status             ReportStatus @default(PENDING)
+  assigned_to_id     String?
+  created_at         DateTime     @default(now())
+  incident_type      String
+  register_number    String
+  user_type          String
+  deleted_at         DateTime?
+  updated_at         DateTime     @default(now()) @updatedAt
+  area               Area
+  report_image_url   String?
+  resolved_at        DateTime?
+  resolved_image_url String?
+  assigned_to        User?        @relation("Report_assignee", fields: [assigned_to_id], references: [id])
 }
 
-model Report {
-  id String @id @default(uuid())
+model UserInvitation {
+  id          String           @id @default(uuid())
+  email       String           @unique
+  role        Role
+  createdById String?
+  status      InvitationStatus @default(PENDING)
+  created_at  DateTime         @default(now())
+  deleted_at  DateTime?
+  updated_at  DateTime         @updatedAt
+  createdBy   User?            @relation("Invitation_creator", fields: [createdById], references: [id])
+}
 
-  user_type       String
-  register_number String
-
-  incident_type String
-
-  description String?
-
-  report_image_url   String?
-  resolved_image_url String?
-
-  resolved_at DateTime?
-
-  latitude  Float
-  longitude Float
-  area      Area
-
-  status ReportStatus @default(PENDING)
-
-  created_at DateTime  @default(now())
-  updated_at DateTime  @default(now()) @updatedAt
-  deleted_at DateTime?
-
-  assigned_to_id String?
-  assigned_to    User?   @relation("Report_assignee", fields: [assigned_to_id], references: [id])
+enum Role {
+  ADMIN
+  MAINTENANCE
+  CLEANING
+  SECURITY
 }
 
 enum ReportStatus {
@@ -64,28 +65,10 @@ enum ReportStatus {
   RESOLVED
   REJECTED
 }
-
 enum Area {
-  LIMPIEZA
-  MANTENIMIENTO
-}
-
-model UserInvitation {
-  id String @id @default(uuid())
-
-  email String
-  role  Role
-
-  createdById String?
-  createdBy   User?   @relation("Invitation_creator", fields: [createdById], references: [id])
-
-  status InvitationStatus @default(PENDING)
-
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  deleted_at DateTime?
-
-  @@unique([email])
+  CLEANING
+  MAINTENANCE
+  SECURITY
 }
 
 enum InvitationStatus {
@@ -106,5 +89,6 @@ enum IncidentType {
   BATHROOM
   LIGHTING
   FURNITURE
+  SECURITY
   OTHER
 }
