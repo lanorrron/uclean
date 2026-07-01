@@ -8,6 +8,7 @@ import ws from "ws";
 import { UserNotFoundError } from "./user.error";
 import { CompleteProfileDto } from "./dtos/complete-profile.dto";
 import { AppLoggerService } from "@app/common/appLogger/appLogger.service";
+import { NotAuthorizedError } from "../shared/errors/not-authorized.error";
 
 
 
@@ -44,17 +45,23 @@ export class UserService {
     return this.repo.findMany(role)
   }
 
-  async remove(id: string) {
+  async remove(id: string, role: Role) {
+    console.log(role)
     const user = await this.findUnique(id)
+    if (user.role === Role.ADMIN && role === Role.ADMIN) {
+
+      throw new NotAuthorizedError();
+    }
+
     await this.supabaseAdmin.auth.admin.deleteUser(user.id)
     return await this.repo.remove(id)
 
-
   }
+  
   async update(id: string, data: { firstName: string; lastName: string }) {
 
     await this.findUnique(id)
-    return  this.repo.update(id, {
+    return this.repo.update(id, {
       first_name: data.firstName,
       last_name: data.lastName,
     })
@@ -86,16 +93,16 @@ export class UserService {
 
     }
 
-    return  this.repo.update(userId, {
+    return this.repo.update(userId, {
       first_name: dto.firstName,
       last_name: dto.lastName,
     })
   }
 
-  async updateRole(userId:string,role:Role){
+  async updateRole(userId: string, role: Role) {
     await this.findUnique(userId);
 
-    return this.repo.update(userId,{role:role})
+    return this.repo.update(userId, { role: role })
   }
 
 

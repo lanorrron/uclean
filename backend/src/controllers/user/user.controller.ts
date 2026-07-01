@@ -27,7 +27,7 @@ export class UserController {
     @Roles(Role.ADMIN)
     @Delete(":id")
     async remove(@Req() req: any) {
-        const result = await this.userService.remove(req.params.id);
+        const result = await this.userService.remove(req.params.id, req.user.role);
         return HttpResponse.Success(result);
     }
 
